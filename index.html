@@ -1,0 +1,724 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Unit 2 Revolutions Practice</title>
+<style>
+:root{
+  --bg:#f2f0ea; --paper:#ffffff; --ink:#1c1e23; --muted:#5f6470; --line:#d9d4c9;
+  --accent:#1e3a6e; --accent-2:#b8322a; --gold:#a8791c; --ok:#1d7a3e; --ok-bg:#e6f4ea; --bad:#b3261e; --bad-bg:#fbe9e7;
+  --warn:#8a5a00; --warn-bg:#fff4d6; --chip:#eeebe3; --hl:#fff1a8; --shadow:0 1px 2px rgba(0,0,0,.06),0 6px 24px rgba(0,0,0,.06);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#14161a; --paper:#1d2026; --ink:#ecebe6; --muted:#a2a6af; --line:#343843;
+    --accent:#8fb0ff; --accent-2:#ff8277; --gold:#e6b452; --ok:#5fd18a; --ok-bg:#163222; --bad:#ff8a80; --bad-bg:#3a1d1b;
+    --warn:#f2c35b; --warn-bg:#3a2e12; --chip:#2a2e36; --hl:#4a4113; --shadow:none;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#14161a; --paper:#1d2026; --ink:#ecebe6; --muted:#a2a6af; --line:#343843;
+  --accent:#8fb0ff; --accent-2:#ff8277; --gold:#e6b452; --ok:#5fd18a; --ok-bg:#163222; --bad:#ff8a80; --bad-bg:#3a1d1b;
+  --warn:#f2c35b; --warn-bg:#3a2e12; --chip:#2a2e36; --hl:#4a4113; --shadow:none;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+.wrap{max-width:900px;margin:0 auto;padding:0 16px}
+header.top{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+header.top .wrap{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding-top:10px;padding-bottom:10px}
+.brand{font-weight:800;margin-right:auto}
+.brand small{display:block;font-weight:500;color:var(--muted);font-size:12px}
+.score{font-variant-numeric:tabular-nums;background:var(--paper);border:1px solid var(--line);border-radius:999px;padding:6px 12px;font-weight:700}
+button{font:inherit;cursor:pointer;border-radius:10px;border:1px solid var(--line);background:var(--paper);color:var(--ink);padding:8px 12px;font-weight:600}
+button:hover{border-color:var(--ink)}
+button.primary{background:var(--accent-2);border-color:var(--accent-2);color:#fff}
+button.blue{background:var(--accent);border-color:var(--accent);color:var(--paper)}
+.tabs{display:flex;gap:6px;margin:18px 0 0}
+.tabs button{border-radius:10px 10px 0 0;border-bottom:none;background:var(--chip);color:var(--muted)}
+.tabs button.on{background:var(--paper);color:var(--ink)}
+.paper{background:var(--paper);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);padding:28px 28px 32px;margin:0 0 20px}
+.tabs + .paper{border-top-left-radius:0}
+h1{font-size:26px;margin:0 0 4px;letter-spacing:-.01em}
+.sub{color:var(--muted);margin:0}
+.howto{margin-top:14px;padding:12px 14px;background:var(--chip);border-radius:10px;font-size:14px;color:var(--muted)}
+.howto b{color:var(--ink)}
+h2.part{font-size:19px;margin:34px 0 4px;padding-bottom:6px;border-bottom:2px solid var(--ink);display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:baseline}
+h2.part span{font-size:14px;color:var(--muted);font-weight:600}
+.wordbox{display:grid;grid-template-columns:repeat(5,1fr);border:1px solid var(--line);border-radius:10px;overflow:hidden;margin:14px 0}
+.wordbox .col{border-right:1px solid var(--line);padding:8px 6px;display:flex;flex-direction:column;gap:4px}
+.wordbox .col:last-child{border-right:none}
+.chip{font:inherit;font-size:13.5px;font-weight:600;text-align:center;padding:4px 6px;border-radius:6px;border:1px solid transparent;background:transparent;color:var(--ink);line-height:1.25}
+.chip:hover{background:var(--chip);border-color:var(--line)}
+.chip.used{color:var(--muted);text-decoration:line-through;opacity:.6}
+.fill{list-style:none;padding:0;margin:0;counter-reset:q}
+.fill li{margin:14px 0;display:flex;gap:10px}
+.fill li .n{font-weight:700;min-width:26px}
+.fill li .t{flex:1}
+input.ans{font:inherit;color:var(--ink);background:transparent;border:none;border-bottom:2px solid var(--muted);padding:2px 6px;border-radius:6px 6px 0 0;outline:none;width:15em;max-width:100%;transition:background .15s}
+input.ans:focus{border-bottom-color:var(--accent);background:color-mix(in srgb,var(--accent) 9%,transparent)}
+.ok{border-bottom-color:var(--ok)!important;background:var(--ok-bg)!important}
+.acc{border-bottom-color:var(--warn)!important;background:var(--warn-bg)!important}
+.bad{border-bottom-color:var(--bad)!important;background:var(--bad-bg)!important}
+.fb{display:block;font-size:13.5px;margin-top:4px}
+.fb:empty{display:none}
+.fb.okt{color:var(--ok)} .fb.acct{color:var(--warn)} .fb.badt{color:var(--bad)}
+.fb .why{display:block;color:var(--muted)}
+.essay{margin:18px 0 26px}
+.essay .prompt{font-weight:700;font-size:17px}
+.essay .req{color:var(--muted);font-size:14px;margin:2px 0 8px}
+textarea{width:100%;min-height:190px;font:inherit;color:var(--ink);background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:12px;resize:vertical;outline:none}
+textarea:focus{border-color:var(--accent)}
+.meter{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0;font-size:13.5px}
+.meter span{background:var(--chip);border-radius:999px;padding:3px 10px}
+.meter span.good{background:var(--ok-bg);color:var(--ok)}
+.used-terms{font-size:13.5px;color:var(--muted)}
+.used-terms b{color:var(--ok)}
+.rubric{margin-top:10px;border:1px solid var(--line);border-radius:10px;padding:12px 14px;display:none}
+.rubric.show{display:block}
+.rubric .total{font-size:22px;font-weight:800}
+.rubric ul{margin:6px 0;padding-left:20px}
+.rubric li.y{color:var(--ok)} .rubric li.n{color:var(--bad)}
+.rubric li .hint{color:var(--muted);display:block;font-size:13.5px}
+.model{margin-top:10px;background:var(--chip);border-radius:8px;padding:10px 12px}
+.model mark,.mine mark{background:var(--hl);color:inherit;padding:0 2px;border-radius:3px}
+.mine{margin-top:8px;font-size:14.5px;white-space:pre-wrap}
+.src{margin:18px 0 22px;border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.src .lbl{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--gold);font-weight:800}
+.src blockquote{margin:8px 0;padding:10px 14px;border-left:4px solid var(--gold);font-family:Georgia,"Times New Roman",serif;font-size:16.5px;background:color-mix(in srgb,var(--gold) 8%,transparent);border-radius:0 8px 8px 0}
+.src .cite{font-size:13px;color:var(--muted)}
+.src svg{width:100%;max-width:560px;display:block;margin:8px auto;height:auto}
+.src .q{font-weight:700;margin-top:10px}
+.opts{display:grid;gap:8px;margin-top:8px}
+.opts button{text-align:left;font-weight:500;display:flex;gap:10px;align-items:flex-start}
+.opts button b{min-width:18px}
+.opts button.right{background:var(--ok-bg);border-color:var(--ok)}
+.opts button.wrong{background:var(--bad-bg);border-color:var(--bad)}
+.opts button:disabled{cursor:default;color:var(--ink)}
+.result{display:none} .result.show{display:block}
+.grade{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+.letter{font-size:44px;font-weight:800;width:76px;height:76px;border-radius:16px;display:grid;place-items:center;color:#fff}
+.big{font-size:40px;font-weight:800;line-height:1}
+.secscore{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:8px;margin-top:14px}
+.secscore div{background:var(--chip);border-radius:8px;padding:8px 10px;font-size:14px}
+.missed{list-style:none;padding:0;margin:14px 0 0}
+.missed li{border-top:1px solid var(--line);padding:8px 0;font-size:14.5px}
+.missed .right{color:var(--ok);font-weight:700}
+.missed .yours{color:var(--bad);text-decoration:line-through}
+/* flashcards */
+.fc-wrap{display:flex;flex-direction:column;align-items:center;gap:14px;margin-top:10px}
+.card{width:100%;max-width:560px;min-height:230px;perspective:1200px;cursor:pointer}
+.card .in{position:relative;width:100%;min-height:230px;transition:transform .45s;transform-style:preserve-3d}
+.card.flip .in{transform:rotateY(180deg)}
+.card .face{position:absolute;inset:0;backface-visibility:hidden;border:1px solid var(--line);border-radius:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:22px;text-align:center;background:var(--paper);box-shadow:var(--shadow)}
+.card .face.back{transform:rotateY(180deg);background:var(--chip)}
+.card .term{font-size:28px;font-weight:800}
+.card .def{font-size:17px}
+.card .cat{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--gold);font-weight:800;margin-bottom:8px}
+.fc-ctrl{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.fc-stat{color:var(--muted);font-size:14px}
+.toggle{font-size:14px;color:var(--muted);display:flex;gap:6px;align-items:center}
+.timeline{margin-top:26px}
+.timeline ol{list-style:none;padding:0;margin:0;border-left:3px solid var(--line)}
+.timeline li{padding:4px 0 10px 16px;position:relative}
+.timeline li::before{content:"";position:absolute;left:-8px;top:10px;width:13px;height:13px;border-radius:50%;background:var(--gold)}
+.timeline li b{display:inline-block;min-width:88px;color:var(--accent)}
+@media (max-width:700px){
+  .paper{padding:18px 16px 22px}
+  .wordbox{grid-template-columns:1fr 1fr}
+  .wordbox .col{border-right:none;border-bottom:1px solid var(--line)}
+  .brand small{display:none}
+  .card .term{font-size:23px}
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <div class="brand">Unit 2 · Age of Revolutions<small>Practice test + vocab flashcards</small></div>
+    <div class="score" id="score">0 / 40</div>
+    <button id="btnNew" title="Different questions, same format">🔀 New test</button>
+    <button id="btnGrade" class="primary">✅ Grade it</button>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="tabs">
+    <button class="on" data-tab="test">📝 Practice Test</button>
+    <button data-tab="cards">🃏 Vocab Flashcards</button>
+  </div>
+
+  <section class="paper" id="tab-test">
+    <h1>Unit 2 Practice Test</h1>
+    <p class="sub">Enlightenment · American & French Revolutions · Napoleon · Latin American Independence &nbsp;|&nbsp; Version <b id="ver">—</b> &nbsp;|&nbsp; 40 pts</p>
+    <div class="howto">
+      <b>Same format as the real test:</b> 15 fill-in-the-blank (word box) · 2 long answers (the preview question + 1 more) · 5 primary sources.
+      <br>Type an answer and press <b>Enter</b> to check it right away. You can tap a word in the box to drop it into the blank you're on.
+      Paragraphs get an <b>estimated</b> score plus a model answer to compare. <b>New test</b> gives you different questions.
+    </div>
+    <div id="test"></div>
+  </section>
+
+  <section class="paper" id="tab-cards" hidden>
+    <h1>Vocab Flashcards</h1>
+    <p class="sub">All 25 words from the study guide. Tap the card to flip it.</p>
+    <div class="fc-wrap">
+      <label class="toggle"><input type="checkbox" id="fcReverse"> Show the definition first (harder)</label>
+      <div class="card" id="card"><div class="in">
+        <div class="face front"><div class="cat" id="fcCat"></div><div class="term" id="fcFront"></div><div class="fc-stat" style="margin-top:12px">tap to flip</div></div>
+        <div class="face back"><div class="cat" id="fcCat2"></div><div class="def" id="fcBack"></div></div>
+      </div></div>
+      <div class="fc-ctrl">
+        <button id="fcPrev">← Back</button>
+        <button id="fcAgain" class="primary">😬 Still learning</button>
+        <button id="fcGot" class="blue">✅ Got it</button>
+        <button id="fcShuffle">🔀 Shuffle</button>
+      </div>
+      <div class="fc-stat" id="fcStat"></div>
+    </div>
+    <div class="timeline">
+      <h2 class="part">Timeline cheat sheet</h2>
+      <ol id="timeline"></ol>
+    </div>
+  </section>
+
+  <section class="paper result" id="result"></section>
+</main>
+
+<script>
+(() => {
+// ================= DATA =================
+// Each term: canonical name, aliases (for matching), category, definition, fill-in sentences (___ = blank)
+const TERMS = [
+ {t:'Divine Right of Kings', al:['divine right of kings','divine right'], cat:'Ideas & Events', d:'The belief that a monarch\'s power comes directly from God, so the king answers only to God and not to the people.',
+  s:['The belief that a king\'s authority comes directly from God, so his subjects cannot question him, is called the ___.',
+     'Absolute monarchs such as Louis XIV of France justified their total power with the ___.',
+     'Enlightenment ideas like "consent of the governed" directly challenged the ___.']},
+ {t:'Glorious Revolution', al:['glorious revolution'], cat:'Ideas & Events', d:'England, 1688: Parliament replaced King James II with William and Mary almost without bloodshed.',
+  s:['In 1688, Parliament replaced King James II with William and Mary in a nearly bloodless event called the ___.',
+     'The ___ in England was called "glorious" because power changed hands with almost no fighting.']},
+ {t:'English Bill of Rights', al:['english bill of rights','bill of rights'], cat:'Documents', d:'1689 English law that limited the monarch\'s power: the king needed Parliament\'s consent to tax, and citizens gained rights like petitioning the king.',
+  s:['Accepted by William and Mary in 1689, the ___ said the monarch could not raise taxes without the consent of Parliament.',
+     'The ___ helped make England a constitutional monarchy and later inspired the American Bill of Rights.']},
+ {t:'Enlightenment', al:['enlightenment','the enlightenment','age of reason'], cat:'Ideas & Events', d:'1700s movement (the "Age of Reason") that used reason and science to question tradition, the Church and absolute rule; it promoted natural rights.',
+  s:['The ___ was an 18th-century movement that used reason to question tradition, religion and absolute monarchy.',
+     'Thinkers of the ___, also called the Age of Reason, argued that all people are born with natural rights.']},
+ {t:'Voltaire', al:['voltaire'], cat:'Thinkers', d:'French Enlightenment writer who used satire to attack the Catholic Church and defended freedom of speech and freedom of religion.',
+  s:['The French writer ___ used satire to criticize the Catholic Church and fought for freedom of speech and religion.',
+     'The saying "I disapprove of what you say, but I will defend to the death your right to say it" is often used to sum up the beliefs of ___.']},
+ {t:'Montesquieu', al:['montesquieu'], cat:'Thinkers', d:'French thinker who wrote The Spirit of the Laws (1748); argued for separation of powers into three branches with checks and balances.',
+  s:['In The Spirit of the Laws, ___ argued that government power should be split into legislative, executive and judicial branches.',
+     'The American system of separation of powers and checks and balances comes from the ideas of ___.']},
+ {t:'Rousseau', al:['rousseau','jean jacques rousseau','jean-jacques rousseau'], cat:'Thinkers', d:'Jean-Jacques Rousseau wrote The Social Contract (1762): government should follow the "general will" of the people. "Man is born free, and everywhere he is in chains."',
+  s:['In The Social Contract, ___ wrote that a good government follows the "general will" of the people.',
+     '"Man is born free, and everywhere he is in chains" is the famous opening line written by ___.']},
+ {t:'Mary Wollstonecraft', al:['mary wollstonecraft','wollstonecraft'], cat:'Thinkers', d:'English writer of A Vindication of the Rights of Woman (1792); argued women deserve the same education and rights as men.',
+  s:['___ wrote A Vindication of the Rights of Woman (1792), arguing that girls deserved the same education as boys.',
+     'The Enlightenment writer who argued that natural rights should apply to women, too, was ___.']},
+ {t:'Declaration of Independence', al:['declaration of independence'], cat:'Documents', d:'1776 document, written mainly by Thomas Jefferson, announcing the 13 colonies\' break from Britain; "all men are created equal" with rights to "life, liberty, and the pursuit of happiness."',
+  s:['Written mainly by Thomas Jefferson in 1776, the ___ announced that the American colonies were breaking away from Britain.',
+     'The phrase "life, liberty, and the pursuit of happiness" comes from the ___.']},
+ {t:'US Constitution', al:['us constitution','u s constitution','united states constitution','constitution','the constitution'], cat:'Documents', d:'Written in 1787; set up the U.S. government with three branches and checks and balances (Montesquieu\'s ideas in action). Still in use today.',
+  s:['Written in 1787, the ___ set up a government with three branches, putting Montesquieu\'s ideas into practice.',
+     'The plan of government that replaced the Articles of Confederation and is still used in America today is the ___.']},
+ {t:'Louis XVI', al:['louis xvi','louis 16','louis 16th','louis the 16th','louis the sixteenth','louis sixteenth','king louis xvi','king louis','louis'], cat:'French Revolution', d:'King of France when the Revolution began in 1789. Weak and indecisive; France was deeply in debt. Executed by guillotine in January 1793.',
+  s:['___ was the king of France when the Revolution began, and he was executed by guillotine in 1793.',
+     'France\'s huge debt, made worse by helping the Americans win their revolution, created a crisis for King ___.']},
+ {t:'Third Estate', al:['third estate','3rd estate'], cat:'French Revolution', d:'About 97% of France: peasants, city workers and the middle class (bourgeoisie). Paid nearly all the taxes but had little political power.',
+  s:['Peasants, city workers and the middle class (bourgeoisie) made up the ___, about 97% of France\'s people.',
+     'The ___ paid almost all of France\'s taxes, while the clergy and nobles paid almost none.']},
+ {t:'Tennis Court Oath', al:['tennis court oath'], cat:'French Revolution', d:'June 20, 1789: locked out of their meeting hall, Third Estate delegates (now the National Assembly) swore not to separate until France had a constitution.',
+  s:['Locked out of their meeting hall in June 1789, the National Assembly swore the ___, promising not to break up until France had a constitution.',
+     'The ___ took place at an indoor sports court near Versailles and was one of the first acts of the French Revolution.']},
+ {t:'Declaration of the Rights of Man', al:['declaration of the rights of man','declaration of the rights of man and of the citizen','declaration of the rights of man and the citizen','rights of man'], cat:'Documents', d:'August 1789 French document: "Men are born and remain free and equal in rights." Guaranteed liberty, property, equality before the law. Inspired by the Declaration of Independence.',
+  s:['Adopted in August 1789, the ___ stated that "men are born and remain free and equal in rights."',
+     'France\'s version of the Declaration of Independence, which promised liberty and equality before the law, was the ___.']},
+ {t:'Sans-Culottes', al:['sans culottes','sans culotte','sansculottes'], cat:'French Revolution', d:'Radical working-class Parisians (shopkeepers, laborers) named for wearing long pants instead of the knee breeches ("culottes") of the rich. Pushed the Revolution to be more radical.',
+  s:['The ___ were radical Parisian workers named for wearing long pants instead of the knee breeches worn by the rich.',
+     'Poor shopkeepers and laborers in Paris who pushed the Revolution in a more radical direction were called the ___.']},
+ {t:'Maximilien Robespierre', al:['maximilien robespierre','robespierre'], cat:'French Revolution', d:'Radical Jacobin leader of the Committee of Public Safety who led the Reign of Terror; he was guillotined himself in July 1794.',
+  s:['As leader of the Committee of Public Safety, ___ ran the Reign of Terror until he himself was guillotined in 1794.',
+     'The Jacobin leader who argued that "terror" was needed to protect a "republic of virtue" was ___.']},
+ {t:'Reign of Terror', al:['reign of terror','the terror'], cat:'French Revolution', d:'1793–1794: the radical government executed about 17,000 people (officially) accused of being enemies of the Revolution; the guillotine became its symbol.',
+  s:['During the ___ (1793–1794), about 17,000 people accused of being enemies of the Revolution were officially executed.',
+     'The guillotine became the symbol of the ___, when even revolutionary leaders like Danton were put to death.']},
+ {t:'Napoleon Bonaparte', al:['napoleon bonaparte','napoleon','bonaparte'], cat:'Napoleon', d:'French general who seized power in a coup in 1799, crowned himself emperor in 1804, conquered much of Europe, and was finally defeated at Waterloo in 1815.',
+  s:['In 1799, the popular general ___ seized power in a coup, and in 1804 he crowned himself emperor.',
+     'After losing the Battle of Waterloo in 1815, ___ was exiled to the island of St. Helena.']},
+ {t:'Napoleonic Code', al:['napoleonic code','code napoleon','civil code'], cat:'Napoleon', d:'1804 single set of laws for all of France: equality before the law, religious toleration, merit over birth — but it limited women\'s rights and free speech.',
+  s:['The ___ gave France one set of laws that promised equality before the law but took away many rights from women.',
+     'One of Napoleon\'s longest-lasting achievements, the ___ still shapes legal systems in Europe and Latin America today.']},
+ {t:'Napoleonic Empire', al:['napoleonic empire','napoleons empire','french empire'], cat:'Napoleon', d:'By 1812 Napoleon controlled most of Europe directly or through allies and relatives. It collapsed after the disastrous 1812 invasion of Russia.',
+  s:['By 1812, the ___ controlled most of Europe, either directly or through allies and members of Napoleon\'s family.',
+     'Napoleon\'s disastrous invasion of Russia in 1812 began the collapse of the ___.']},
+ {t:'Congress of Vienna', al:['congress of vienna'], cat:'Napoleon', d:'1814–1815 meeting of European leaders (led by Austria\'s Metternich) after Napoleon\'s defeat: restored monarchies and created a balance of power so France couldn\'t dominate again.',
+  s:['After Napoleon\'s defeat, European leaders met at the ___ (1814–1815) to restore old monarchies and create a balance of power.',
+     'Led by Austria\'s Prince Metternich, the ___ redrew the map of Europe so that France could never dominate it again.']},
+ {t:'Miguel Hidalgo', al:['miguel hidalgo','hidalgo','father hidalgo','padre hidalgo'], cat:'Latin America', d:'Mexican priest who started Mexico\'s fight for independence in 1810 with the "Grito de Dolores" (Cry of Dolores); led Indigenous and mestizo followers; executed in 1811.',
+  s:['Mexico\'s fight for independence began in 1810 when the priest ___ rang his church bell and gave the "Grito de Dolores."',
+     'The Mexican priest who led an army of Indigenous people and mestizos against Spanish rule and was executed in 1811 was ___.']},
+ {t:'Jose de San Martin', al:['jose de san martin','san martin','jose san martin'], cat:'Latin America', d:'Argentine general who led an army across the Andes to free Chile and helped win independence for Argentina and Peru; later stepped aside for Bolívar.',
+  s:['___ led an army across the Andes Mountains to free Chile and helped win independence for Argentina and Peru.',
+     'The liberator of southern South America, who stepped aside and let Bolívar finish the fight, was ___.']},
+ {t:'Simon Bolivar', al:['simon bolivar','bolivar'], cat:'Latin America', d:'"The Liberator." Venezuelan-born Creole who won independence for Venezuela, Colombia, Ecuador, Peru and Bolivia (named after him); dreamed of a united Gran Colombia.',
+  s:['Known as "The Liberator," ___ won independence for Venezuela, Colombia and Ecuador from Spain.',
+     'The country of Bolivia is named after the Venezuelan-born revolutionary ___.']},
+ {t:'Toussaint L\'Ouverture', al:['toussaint louverture','toussaint l ouverture','toussaint louverture','toussaint','louverture','l ouverture'], cat:'Latin America', d:'Formerly enslaved man who led the revolution in the French colony of Saint-Domingue starting in 1791; it became Haiti (1804), the first independent Black republic.',
+  s:['A formerly enslaved man, ___ led the revolution in the French colony of Saint-Domingue, which became the nation of Haiti.',
+     'The leader of the slave revolt that eventually made Haiti the first independent Black republic was ___.']}
+];
+const BOX_COLS = [[0,1,2,3,4],[5,6,7,8,9],[10,11,12,13,14],[15,16,17,18,19],[20,21,22,23,24]];
+
+// ---- Primary sources ----
+const CARTOON = `<svg viewBox="0 0 560 300" role="img" aria-label="Cartoon: a bent-over peasant carries a priest and a nobleman on his back">
+ <rect x="0" y="0" width="560" height="300" fill="none"/>
+ <line x1="20" y1="270" x2="540" y2="270" stroke="currentColor" stroke-width="2"/>
+ <!-- peasant -->
+ <circle cx="175" cy="182" r="16" fill="none" stroke="currentColor" stroke-width="3"/>
+ <path d="M188 190 Q240 165 300 190" fill="none" stroke="currentColor" stroke-width="5"/>
+ <path d="M300 190 L290 270 M300 190 L320 270" stroke="currentColor" stroke-width="4" fill="none"/>
+ <path d="M200 185 L180 225 L160 270" stroke="currentColor" stroke-width="3" fill="none"/>
+ <line x1="150" y1="200" x2="150" y2="270" stroke="currentColor" stroke-width="3"/>
+ <path d="M196 196 L152 214" stroke="currentColor" stroke-width="3"/>
+ <path d="M160 168 L192 168 L186 156 L166 156 Z" fill="currentColor" opacity=".6"/>
+ <!-- clergy -->
+ <circle cx="235" cy="100" r="13" fill="none" stroke="currentColor" stroke-width="3"/>
+ <path d="M220 115 L250 115 L262 172 L210 172 Z" fill="currentColor" opacity=".85"/>
+ <path d="M228 87 L242 87 L235 72 Z" fill="currentColor"/>
+ <!-- noble -->
+ <circle cx="290" cy="98" r="13" fill="none" stroke="currentColor" stroke-width="3"/>
+ <path d="M276 112 L304 112 L310 170 L270 170 Z" fill="none" stroke="currentColor" stroke-width="3"/>
+ <path d="M274 86 Q290 70 308 84 L318 70" fill="none" stroke="currentColor" stroke-width="3"/>
+ <line x1="306" y1="150" x2="350" y2="200" stroke="currentColor" stroke-width="3"/>
+ <!-- labels -->
+ <g font-size="14" font-family="sans-serif" fill="currentColor">
+  <text x="60" y="60">1st Estate (Clergy)</text><line x1="150" y1="66" x2="222" y2="110" stroke="currentColor"/>
+  <text x="360" y="60">2nd Estate (Nobility)</text><line x1="400" y1="66" x2="304" y2="104" stroke="currentColor"/>
+  <text x="360" y="235">3rd Estate (Peasant)</text><line x1="360" y1="230" x2="305" y2="200" stroke="currentColor"/>
+ </g>
+</svg>`;
+const ESTATES_CHART = (() => {
+  const rows = [['1st Estate (Clergy)',1,10],['2nd Estate (Nobles)',2,25],['3rd Estate (Everyone else)',97,65]];
+  let y = 40, s = `<svg viewBox="0 0 560 260" role="img" aria-label="Bar chart of population and land owned by each French estate">
+  <g font-family="sans-serif" font-size="13" fill="currentColor">
+  <rect x="200" y="8" width="14" height="10" fill="#1e3a6e"/><text x="220" y="17">% of population</text>
+  <rect x="350" y="8" width="14" height="10" fill="#a8791c"/><text x="370" y="17">% of land owned</text>`;
+  rows.forEach(([n,p,l]) => {
+    s += `<text x="0" y="${y+18}" font-weight="700">${n.split(' (')[0]}</text><text x="0" y="${y+34}" font-size="11" opacity=".7">(${n.split(' (')[1]}</text>
+     <rect x="170" y="${y+4}" width="${p*3.6}" height="16" fill="#1e3a6e"/><text x="${176+p*3.6}" y="${y+17}">${p}%</text>
+     <rect x="170" y="${y+24}" width="${l*3.6}" height="16" fill="#a8791c"/><text x="${176+l*3.6}" y="${y+37}">${l}%</text>`;
+    y += 66;
+  });
+  return s + `<text x="0" y="252" font-size="11" opacity=".7">Approximate figures for France in 1789. Taxes: 1st &amp; 2nd Estates paid almost none; the 3rd Estate paid nearly all.</text></g></svg>`;
+})();
+const SOURCES = [
+ {kind:'Text', body:'<blockquote>"Men are born and remain free and equal in rights. Social distinctions may be founded only upon the general good."</blockquote><div class="cite">— Declaration of the Rights of Man and of the Citizen, Article 1 (France, 1789)</div>',
+  q:'Which idea does this passage express?', a:'All people have natural rights and equality, an Enlightenment idea', w:['Kings receive their power directly from God','The nobles should keep their special privileges','France should be ruled by an emperor'],
+  why:'"Free and equal in rights" = natural rights & equality from Enlightenment thinkers. It attacks the privileges of the 1st and 2nd Estates.'},
+ {kind:'Text', body:'<blockquote>"The principle of all sovereignty resides essentially in the nation. No body nor individual may exercise any authority which does not proceed directly from the nation."</blockquote><div class="cite">— Declaration of the Rights of Man and of the Citizen, Article 3 (1789)</div>',
+  q:'This article most directly rejects which belief?', a:'The Divine Right of Kings', w:['Separation of powers','Freedom of religion','The general will'],
+  why:'If all authority comes from the NATION (the people), it cannot come from God to the king — that is a direct rejection of Divine Right.'},
+ {kind:'Text', body:'<blockquote>"If the basis of popular government in peacetime is virtue, the basis of popular government during a revolution is both virtue and terror: virtue, without which terror is murderous; terror, without which virtue is powerless."</blockquote><div class="cite">— Maximilien Robespierre, speech to the National Convention, February 1794</div>',
+  q:'Robespierre is using this argument to justify…', a:'The Reign of Terror', w:['The Tennis Court Oath','The Congress of Vienna','The Napoleonic Code'],
+  why:'Robespierre led the Committee of Public Safety and argued terror (executions) was needed to protect the Revolution — the Reign of Terror (1793–94).'},
+ {kind:'Text', body:'<blockquote>"When the legislative and executive powers are united in the same person… there can be no liberty… Again, there is no liberty if the judiciary power be not separated from the legislative and executive."</blockquote><div class="cite">— Montesquieu, The Spirit of the Laws (1748)</div>',
+  q:'Which document put this idea directly into practice?', a:'The US Constitution', w:['The Divine Right of Kings','The Napoleonic Code','The Declaration of Independence'],
+  why:'The US Constitution created three separate branches (legislative, executive, judicial) with checks and balances — Montesquieu\'s separation of powers.'},
+ {kind:'Text', body:'<blockquote>"Man is born free, and everywhere he is in chains."</blockquote><div class="cite">— Jean-Jacques Rousseau, The Social Contract (1762)</div>',
+  q:'What does Rousseau mean by "chains"?', a:'Unfair governments and social systems take away people\'s natural freedom', w:['Enslaved people should be freed from prison','People should obey their king without question','Freedom is dangerous and must be controlled'],
+  why:'People are born with natural freedom, but unjust governments and social rules restrict it. Rousseau wanted government based on the "general will" of the people.'},
+ {kind:'Text', body:'<blockquote>"I do not wish them [women] to have power over men; but over themselves."</blockquote><div class="cite">— Mary Wollstonecraft, A Vindication of the Rights of Woman (1792)</div>',
+  q:'What is Wollstonecraft arguing?', a:'Women deserve independence and control over their own lives, including education', w:['Women should rule instead of men','Women do not need an education','Only queens should have rights'],
+  why:'She wanted women to have rights, education and control over themselves — applying Enlightenment natural rights to women.'},
+ {kind:'Text', body:'<blockquote>"We hold these truths to be self-evident, that all men are created equal… That to secure these rights, Governments are instituted among Men, deriving their just powers from the consent of the governed."</blockquote><div class="cite">— Declaration of Independence (1776)</div>',
+  q:'According to this document, where does a government get its power?', a:'From the consent of the people it governs', w:['Directly from God','From the strongest army','From the oldest noble families'],
+  why:'"Consent of the governed" means power comes from the people — an Enlightenment idea (John Locke) and the opposite of Divine Right.'},
+ {kind:'Text', body:'<blockquote>"That levying money for or to the use of the Crown… without grant of Parliament… is illegal."</blockquote><div class="cite">— English Bill of Rights (1689)</div>',
+  q:'Whose power does this rule limit?', a:'The monarch\'s — the king or queen cannot tax without Parliament', w:['Parliament\'s — it cannot pass new laws','The Church\'s — it cannot collect money','The people\'s — they must pay any tax'],
+  why:'After the Glorious Revolution, the English Bill of Rights limited the monarch: no taxes without Parliament\'s approval.'},
+ {kind:'Text', body:'<blockquote>"My true glory is not to have won forty battles… What nothing will destroy, what will live forever, is my Civil Code."</blockquote><div class="cite">— Napoleon Bonaparte, as recorded during his exile on St. Helena</div>',
+  q:'Which achievement is Napoleon proudest of?', a:'The Napoleonic Code', w:['The Congress of Vienna','The Reign of Terror','The Tennis Court Oath'],
+  why:'His "Civil Code" = the Napoleonic Code (1804), a single law code that outlasted his empire.'},
+ {kind:'Text', body:'<blockquote>"…we are… neither Indian nor European, but a species midway between the legitimate proprietors of this country and the Spanish usurpers."</blockquote><div class="cite">— Simón Bolívar, Letter from Jamaica (1815)</div>',
+  q:'Who does Bolívar mean by "we"?', a:'Creoles — people of Spanish descent born in the Americas', w:['Peninsulares — people born in Spain','Enslaved Africans in Haiti','Indigenous peoples'],
+  why:'Bolívar was a Creole. Creoles were born in the Americas to Spanish families but were blocked from top jobs by peninsulares (Spain-born). Creoles led most Latin American independence movements.'},
+ {kind:'Text', body:'<blockquote>"What is the Third Estate? Everything. What has it been until now in the political order? Nothing. What does it desire to be? Something."</blockquote><div class="cite">— Abbé Sieyès, What Is the Third Estate? (January 1789)</div>',
+  q:'What is the main argument of this pamphlet?', a:'The Third Estate is most of the nation and deserves real political power', w:['The Third Estate should pay fewer taxes to the king','The nobles should lead the nation','France should return to Divine Right'],
+  why:'The Third Estate was ~97% of France but had almost no say. Months later, it formed the National Assembly and swore the Tennis Court Oath.'},
+ {kind:'Text', body:'<blockquote>"The royal throne is not the throne of a man, but the throne of God himself."</blockquote><div class="cite">— Bishop Jacques-Bénigne Bossuet, court preacher to Louis XIV (c. 1700)</div>',
+  q:'This quote is an example of which idea?', a:'The Divine Right of Kings', w:['The Enlightenment','Separation of powers','Consent of the governed'],
+  why:'If the throne belongs to God, the king rules for God and answers only to God — Divine Right of Kings.'},
+ {kind:'Picture', body:CARTOON + '<div class="cite">Simplified redrawing of a French political cartoon from 1789.</div>',
+  q:'What is the cartoonist\'s message?', a:'The Third Estate carried the burden of supporting the clergy and nobles', w:['The clergy and nobles worked hard to help peasants','The king was carrying the whole country','The three estates were treated equally'],
+  why:'The peasant (3rd Estate) is bent over carrying the 1st and 2nd Estates — they paid nearly all taxes while the privileged estates paid almost none.'},
+ {kind:'Chart', body:ESTATES_CHART,
+  q:'Which statement is supported by the chart?', a:'The 1st and 2nd Estates were about 3% of the people but owned about a third of the land', w:['The 3rd Estate owned all of the land in France','The clergy was the largest group in France','Each estate owned land equal to its share of the population'],
+  why:'1% + 2% = 3% of people owned 10% + 25% = 35% of the land and paid almost no taxes. This inequality was a major cause of the Revolution.'}
+];
+
+// ---- Long answers ----
+const PREVIEW = {
+  q:'PREVIEW QUESTION: How successful was the French Revolution?',
+  req:'Use at least 4 words from the word box. Write 4–6 sentences.',
+  min:4, max:6, preview:true,
+  claim:['success','successful','failed','failure','partly','partially','mixed','somewhat','not very','very','mostly'],
+  ideas:[
+    {l:'Clear position (successful / not / partly)', h:'Start with a claim: "The French Revolution was partly successful because…"', k:['success','fail','partly','partially','mixed','somewhat','both']},
+    {l:'A success (rights, equality, end of absolute monarchy)', h:'e.g. Declaration of the Rights of Man, ended Divine Right/absolute monarchy, Napoleonic Code kept equality before the law.', k:['rights of man','equal','liberty','freedom','ended','absolute','divine right','privilege','napoleonic code','republic','constitution','third estate']},
+    {l:'A failure or cost (Terror, Napoleon, kings returned)', h:'e.g. Reign of Terror killed thousands; Napoleon became emperor (a new all-powerful ruler); Congress of Vienna brought back a king.', k:['terror','guillotine','executed','killed','violen','napoleon','emperor','dictator','congress of vienna','restored','king returned','robespierre']},
+    {l:'Long-term impact', h:'e.g. its ideas inspired Latin American revolutions (Haiti, Bolívar) and later democracies.', k:['inspire','spread','latin america','haiti','bolivar','toussaint','hidalgo','influence','today','future','world']}
+  ],
+  model:'The French Revolution was only partly successful. It succeeded in ending absolute monarchy and the Divine Right of Kings when the Third Estate took power and Louis XVI was executed. The Declaration of the Rights of Man spread the ideas of liberty and equality, and later the Napoleonic Code kept equality before the law. However, the Reign of Terror killed thousands of people, and Napoleon Bonaparte made himself emperor, so France traded one all-powerful ruler for another. In the end, the Congress of Vienna brought back a king, but the Revolution\'s ideas kept inspiring people around the world, including in Haiti and Latin America.'
+};
+const ESSAYS = [
+ {q:'How did Enlightenment ideas influence the American and French Revolutions?', req:'Answer in a paragraph (5+ sentences) using words from the word box.',
+  claim:['enlightenment','influence','inspired','ideas'],
+  ideas:[
+   {l:'Names Enlightenment thinkers and their ideas', h:'e.g. Montesquieu (separation of powers), Rousseau (general will), Voltaire (free speech), natural rights.', k:['montesquieu','rousseau','voltaire','wollstonecraft','locke','natural rights','separation','general will','social contract']},
+   {l:'Connects ideas to the American Revolution', h:'e.g. Declaration of Independence ("all men are created equal," consent of the governed); US Constitution (three branches).', k:['declaration of independence','constitution','american','colonies','consent of the governed','three branches']},
+   {l:'Connects ideas to the French Revolution', h:'e.g. Declaration of the Rights of Man ("free and equal in rights"); Third Estate demanded a voice; challenged Divine Right.', k:['rights of man','french','third estate','tennis court','divine right','louis']},
+   {l:'Explains the link (ideas → action)', h:'Say HOW: people used these ideas to argue that kings must not rule without the people\'s consent.', k:['because','so ','led to','caused','inspired','influenced','challenged','questioned']}
+  ],
+  model:'Enlightenment ideas gave both the American and French revolutionaries reasons to challenge their kings. Thinkers like Rousseau argued that government should follow the general will of the people, which challenged the Divine Right of Kings. The Americans used these ideas in the Declaration of Independence, which said all men are created equal and that government needs the consent of the governed. Montesquieu\'s idea of separation of powers was later built into the US Constitution with its three branches. In France, the Third Estate used the same ideas to write the Declaration of the Rights of Man, which said men are "born and remain free and equal in rights." Because of the Enlightenment, people in both countries believed they had natural rights that no king could take away.'},
+ {q:'What were the main causes of the French Revolution?', req:'Answer in a paragraph (5+ sentences) using words from the word box.',
+  claim:['cause','caused','because','led to','reasons'],
+  ideas:[
+   {l:'Social inequality (the estates)', h:'e.g. the Third Estate was ~97% of people but paid almost all taxes and had little power.', k:['third estate','estate','clergy','noble','privilege','unequal','inequal']},
+   {l:'Money problems (debt / taxes)', h:'e.g. France was deeply in debt from wars, including helping the American Revolution, and wanted to raise taxes.', k:['debt','taxes','tax','bankrupt','money','american revolution']},
+   {l:'Enlightenment ideas', h:'e.g. Rousseau, Voltaire and Montesquieu made people question Divine Right and absolute monarchy.', k:['enlightenment','rousseau','voltaire','montesquieu','divine right','natural rights']},
+   {l:'Weak leadership / hunger', h:'e.g. Louis XVI was weak and indecisive; bad harvests made bread prices soar.', k:['louis','weak','bread','food','hunger','harvest','starv','king']}
+  ],
+  model:'The French Revolution had several major causes. First, French society was very unequal: the Third Estate was about 97% of the population but paid almost all the taxes, while the clergy and nobles had special privileges. Second, France was deeply in debt, partly from helping the Americans win the Declaration of Independence\'s war, so Louis XVI needed to raise taxes. Third, Enlightenment thinkers like Rousseau and Voltaire spread new ideas about natural rights that made people question the Divine Right of Kings. Finally, bad harvests made bread prices soar, so poor people in Paris, like the sans-culottes, were hungry and angry. Together, these problems pushed the Third Estate to break away and swear the Tennis Court Oath in 1789.'},
+ {q:'Was Napoleon Bonaparte a protector or a betrayer of the French Revolution\'s ideals?', req:'Take a side and support it in a paragraph (5+ sentences) using words from the word box.',
+  claim:['protect','betray','hero','tyrant','both','napoleon'],
+  ideas:[
+   {l:'Takes a clear side', h:'e.g. "Napoleon both protected and betrayed the Revolution…" or pick one.', k:['protect','betray','hero','tyrant','villain','both']},
+   {l:'Evidence he protected the ideals', h:'e.g. the Napoleonic Code gave equality before the law, religious toleration and jobs based on merit.', k:['napoleonic code','equal','merit','law','toleration','education']},
+   {l:'Evidence he betrayed the ideals', h:'e.g. took power in a coup (1799), crowned himself emperor (1804), censored newspapers, limited women\'s rights.', k:['emperor','crown','coup','dictator','censor','women','absolute','power']},
+   {l:'Empire / downfall', h:'e.g. the Napoleonic Empire conquered most of Europe; Russia 1812; Waterloo 1815; Congress of Vienna.', k:['napoleonic empire','empire','europe','russia','waterloo','congress of vienna','exile','conquer']}
+  ],
+  model:'Napoleon Bonaparte both protected and betrayed the ideals of the French Revolution. He protected some ideals through the Napoleonic Code, which gave French men equality before the law and let people rise by merit instead of birth. However, he betrayed the Revolution\'s goal of liberty when he seized power in a coup in 1799 and crowned himself emperor in 1804, becoming as powerful as Louis XVI had been. He also censored newspapers and took away rights from women. He built the Napoleonic Empire across most of Europe, spreading some revolutionary ideas, but after his invasion of Russia failed he was defeated. Finally, the Congress of Vienna restored kings to power, showing that Napoleon had not secured the Revolution\'s ideals.'},
+ {q:'How did the Enlightenment and the French Revolution inspire independence movements in Latin America?', req:'Answer in a paragraph (5+ sentences) using words from the word box.',
+  claim:['inspire','influence','latin america','independence'],
+  ideas:[
+   {l:'Haiti', h:'e.g. Toussaint L\'Ouverture, a formerly enslaved man, led the revolt in Saint-Domingue; Haiti became independent in 1804.', k:['toussaint','haiti','saint domingue','saint-domingue','enslaved','slave']},
+   {l:'Mexico', h:'e.g. Miguel Hidalgo\'s "Grito de Dolores" in 1810.', k:['hidalgo','mexico','grito','dolores']},
+   {l:'South America', h:'e.g. Simón Bolívar (Venezuela, Colombia) and José de San Martín (Argentina, Chile, Peru).', k:['bolivar','san martin','venezuela','argentina','chile','peru','colombia','south america']},
+   {l:'Connects to ideas or Napoleon', h:'e.g. Creoles read Enlightenment writers and the Rights of Man; Napoleon\'s invasion of Spain weakened Spanish control.', k:['enlightenment','rights of man','liberty','equality','napoleon','spain','creole','rousseau','declaration']}
+  ],
+  model:'The Enlightenment and the French Revolution inspired people in Latin America to fight for independence. The Declaration of the Rights of Man said all men are born free and equal, and enslaved people in the French colony of Saint-Domingue took those words seriously. Toussaint L\'Ouverture led their revolt, and Haiti became the first independent Black republic in 1804. In Mexico, the priest Miguel Hidalgo began the fight for independence in 1810. In South America, Creole leaders like Simón Bolívar and José de San Martín, who had read Enlightenment thinkers like Rousseau, led armies that freed much of the continent. Napoleon Bonaparte also helped without meaning to, because his invasion of Spain weakened Spain\'s control over its colonies.'},
+ {q:'Compare the Glorious Revolution in England with the French Revolution.', req:'Explain at least one similarity and one difference in a paragraph (5+ sentences) using words from the word box.',
+  claim:['glorious revolution','french revolution','compare','similar','different','both'],
+  ideas:[
+   {l:'Similarity (both limited the king)', h:'e.g. both challenged the Divine Right of Kings and gave more power to the people or their representatives.', k:['both','similar','divine right','limit','alike','also']},
+   {l:'Glorious Revolution details', h:'e.g. 1688, nearly bloodless, William and Mary, English Bill of Rights, constitutional monarchy, Parliament.', k:['english bill of rights','parliament','bloodless','william','mary','constitutional monarchy','1688']},
+   {l:'French Revolution details', h:'e.g. Third Estate, Tennis Court Oath, Rights of Man, Louis XVI executed, Reign of Terror.', k:['third estate','tennis court','rights of man','louis','reign of terror','robespierre','guillotine']},
+   {l:'Difference (violence / result)', h:'e.g. England kept a king with limits; France executed its king, went through the Terror and ended up with Napoleon.', k:['different','difference','however','but','unlike','violent','bloody','whereas']}
+  ],
+  model:'The Glorious Revolution and the French Revolution both challenged the Divine Right of Kings, but they turned out very differently. In 1688, England\'s Parliament replaced King James II with William and Mary in the nearly bloodless Glorious Revolution. The English Bill of Rights then limited the monarch\'s power, creating a constitutional monarchy. In France, the Third Estate swore the Tennis Court Oath and wrote the Declaration of the Rights of Man to limit the king, too. However, the French Revolution became very violent: Louis XVI was executed and thousands died in the Reign of Terror. Unlike England, which kept a limited king, France ended up with a new all-powerful ruler, Napoleon Bonaparte.'}
+];
+
+const TIMELINE = [
+ ['1688–89','Glorious Revolution; English Bill of Rights'],['1690–1780s','Enlightenment: Voltaire, Montesquieu (1748), Rousseau (1762)'],['1776','Declaration of Independence'],
+ ['1787','US Constitution written'],['1789 (May)','Estates-General meets — Louis XVI needs money'],['1789 (June)','Tennis Court Oath (National Assembly)'],
+ ['1789 (July 14)','Storming of the Bastille'],['1789 (Aug)','Declaration of the Rights of Man'],['1791','Haitian Revolution begins (Toussaint L\'Ouverture)'],
+ ['1792','Mary Wollstonecraft — Rights of Woman; France becomes a republic'],['1793','Louis XVI executed; Reign of Terror begins'],['1794','Robespierre guillotined; Terror ends'],
+ ['1799','Napoleon seizes power'],['1804','Napoleon crowned emperor; Napoleonic Code; Haiti independent'],['1810','Hidalgo\'s Grito de Dolores (Mexico)'],
+ ['1812','Napoleon\'s invasion of Russia fails'],['1814–15','Congress of Vienna'],['1815','Waterloo — Napoleon exiled'],['1817–1824','San Martín & Bolívar free South America']
+];
+
+// ================= HELPERS =================
+const norm = s => (s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[’'`]/g,'').replace(/[^a-z0-9 ]/g,' ').replace(/\s+/g,' ').trim().replace(/^the /,'');
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function lev(a,b){ const m=a.length,n=b.length; if(!m) return n; if(!n) return m; let p=[...Array(n+1).keys()]; for(let i=1;i<=m;i++){ const c=[i]; for(let j=1;j<=n;j++) c[j]=Math.min(p[j]+1,c[j-1]+1,p[j-1]+(a[i-1]===b[j-1]?0:1)); p=c; } return p[n]; }
+let R = Math.random;
+const mulberry = a => () => { a|=0; a=a+0x6D2B79F5|0; let t=Math.imul(a^a>>>15,1|a); t=t+Math.imul(t^t>>>7,61|t)^t; return ((t^t>>>14)>>>0)/4294967296; };
+const rnd = n => Math.floor(R()*n);
+const pick = a => a[rnd(a.length)];
+const shuffle = a => { a=[...a]; for(let i=a.length-1;i>0;i--){ const j=rnd(i+1); [a[i],a[j]]=[a[j],a[i]]; } return a; };
+const store = { get(k){ try { return JSON.parse(localStorage.getItem(k)||'null'); } catch(e){ return null; } }, set(k,v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch(e){} } };
+
+// match typed answer to a term
+function matchTerm(v, term){
+  const n = norm(v); if (!n) return 'empty';
+  const al = term.al.map(norm);
+  if (al.includes(n)) return 'ok';
+  const tol = s => s.length <= 6 ? 1 : s.length <= 12 ? 2 : 3;
+  if (al.some(a => lev(a, n) <= tol(a))) return 'acc';
+  return 'bad';
+}
+const whichTerm = v => { const n = norm(v); return TERMS.find(t => t.al.map(norm).includes(n)); };
+
+// essay analysis
+function termsUsed(text){
+  const n = ' ' + norm(text) + ' ';
+  return TERMS.filter(t => t.al.some(a => {
+    const an = norm(a); if (an.length < 4) return false;
+    if (['constitution','louis','napoleon','bonaparte','hidalgo','toussaint','bolivar','the terror','rights of man','bill of rights'].includes(an)) return n.includes(' ' + an + ' ');
+    return n.includes(' ' + an + ' ');
+  }));
+}
+function sentences(text){ return text.split(/[.!?]+(?:\s|$)/).map(s => s.trim()).filter(s => s.split(/\s+/).length >= 3); }
+function hasKw(text, kws){ const n = ' ' + norm(text) + ' '; return kws.some(k => n.includes(norm(k).length > 4 ? norm(k) : ' ' + norm(k))); }
+function highlight(text){
+  let h = esc(text);
+  const names = TERMS.flatMap(t => [t.t, ...t.al.filter(a => a.length > 5)]).sort((a,b) => b.length - a.length);
+  names.forEach(nm => {
+    const re = new RegExp('(?<![\\w>])(' + nm.replace(/[.*+?^${}()|[\]\\]/g,'\\$&').replace(/'/g,"(?:'|&#39;|’)?").replace(/ /g,'[\\s-]') + ')(?![\\w<])','gi');
+    h = h.replace(re, '<mark>$1</mark>');
+  });
+  return h.replace(/<mark>([^<]*)<mark>([^<]*)<\/mark>([^<]*)<\/mark>/g,'<mark>$1$2$3</mark>');
+}
+
+// ================= BUILD TEST =================
+let SEED, FILL = [], SRC = [], ESS = [], STATE = {};
+function build(seed){
+  SEED = seed; R = mulberry(seed); STATE = {};
+  document.getElementById('ver').textContent = '#' + seed;
+  const saved = store.get('h2-' + seed) || {};
+  FILL = shuffle(TERMS.map((t,i) => i)).slice(0,15).map(i => ({i, s: pick(TERMS[i].s)}));
+  const visual = shuffle(SOURCES.filter(s => s.kind !== 'Text')).slice(0,1);
+  SRC = shuffle([...visual, ...shuffle(SOURCES.filter(s => s.kind === 'Text')).slice(0,4)]).map(s => ({...s, opts: shuffle([s.a, ...s.w])}));
+  ESS = [PREVIEW, pick(ESSAYS)];
+
+  let h = '';
+  // Part 1
+  h += `<h2 class="part">Part 1 · Fill in the Blank <span>15 × 1 pt = 15 pts</span></h2>
+    <p class="sub">Use the word box. Not every word will be used.</p>
+    <div class="wordbox">${BOX_COLS.map(col => `<div class="col">${col.map(i => `<button type="button" class="chip" data-term="${i}">${esc(TERMS[i].t)}</button>`).join('')}</div>`).join('')}</div>
+    <ol class="fill">`;
+  FILL.forEach((f, k) => {
+    const [a, b] = f.s.split('___');
+    h += `<li><span class="n">${k+1}.</span><div class="t">${esc(a)}<input class="ans" id="f-${k}" data-k="${k}" autocomplete="off" autocapitalize="off" spellcheck="false">${esc(b)}<span class="fb" id="fb-f-${k}"></span></div></li>`;
+  });
+  h += `</ol>`;
+
+  // Part 2
+  h += `<h2 class="part">Part 2 · Long Answer <span>2 × 10 pts = 20 pts</span></h2>
+    <p class="sub">Write a paragraph. Use words from the word box (they light up when you use them). Click <b>Check my paragraph</b> for an estimated score and a model answer.</p>`;
+  ESS.forEach((e, k) => {
+    h += `<div class="essay"><div class="prompt">${k+1}. ${esc(e.q)}</div><div class="req">${esc(e.req)}</div>
+      <textarea id="e-${k}" data-k="${k}" placeholder="Start with a clear topic sentence that answers the question…"></textarea>
+      <div class="meter" id="m-${k}"></div><div class="used-terms" id="u-${k}"></div>
+      <div style="margin-top:8px"><button class="blue" data-check="${k}">Check my paragraph</button></div>
+      <div class="rubric" id="r-${k}"></div></div>`;
+  });
+
+  // Part 3
+  h += `<h2 class="part">Part 3 · Primary Sources <span>5 × 1 pt = 5 pts</span></h2>`;
+  SRC.forEach((s, k) => {
+    h += `<div class="src"><div class="lbl">Source ${k+1} · ${s.kind}</div>${s.body}
+      <div class="q">${k+1}. ${esc(s.q)}</div>
+      <div class="opts" id="o-${k}">${s.opts.map((o, j) => `<button type="button" data-src="${k}" data-opt="${j}"><b>${'ABCD'[j]}.</b><span>${esc(o)}</span></button>`).join('')}</div>
+      <span class="fb" id="fb-s-${k}"></span></div>`;
+  });
+  h += `<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:24px"><button class="primary" id="btnGrade2">✅ Grade my test</button><button id="btnNew2">🔀 New test</button><button id="btnClear">↺ Clear answers</button></div>`;
+
+  document.getElementById('test').innerHTML = h;
+  document.getElementById('result').classList.remove('show');
+  document.getElementById('btnGrade2').onclick = gradeAll;
+  document.getElementById('btnNew2').onclick = newTest;
+  document.getElementById('btnClear').onclick = clearAll;
+
+  // restore
+  FILL.forEach((f,k) => { const v = saved['f-'+k]; if (v){ document.getElementById('f-'+k).value = v; checkFill(k); } });
+  ESS.forEach((e,k) => { const v = saved['e-'+k]; document.getElementById('e-'+k).value = v || ''; meter(k); if (saved['ec-'+k]) checkEssay(k); });
+  SRC.forEach((s,k) => { if (saved['s-'+k] != null) answerSrc(k, saved['s-'+k], true); });
+  updateBox(); updateScore();
+}
+function save(){
+  const o = {};
+  FILL.forEach((f,k) => { const v = document.getElementById('f-'+k).value; if (v) o['f-'+k] = v; });
+  ESS.forEach((e,k) => { o['e-'+k] = document.getElementById('e-'+k).value; if (STATE['e-'+k] != null) o['ec-'+k] = 1; });
+  SRC.forEach((s,k) => { if (STATE['s-'+k] != null) o['s-'+k] = STATE['sopt-'+k]; });
+  store.set('h2-' + SEED, o);
+}
+
+// ---- fill in ----
+function checkFill(k){
+  const el = document.getElementById('f-'+k), fb = document.getElementById('fb-f-'+k), term = TERMS[FILL[k].i];
+  const r = matchTerm(el.value, term);
+  el.classList.remove('ok','acc','bad');
+  if (r === 'empty'){ fb.className = 'fb badt'; fb.innerHTML = `✗ (blank) Answer: <b>${esc(term.t)}</b><span class="why">${esc(term.d)}</span>`; el.classList.add('bad'); STATE['f-'+k] = 0; }
+  else if (r === 'ok'){ fb.className = 'fb okt'; fb.innerHTML = '✓ ' + pick(['Correct!','Nice!','Yes!','Exactly!']); el.classList.add('ok'); STATE['f-'+k] = 1; }
+  else if (r === 'acc'){ fb.className = 'fb acct'; fb.innerHTML = `✓ Right idea — spell it: <b>${esc(term.t)}</b>`; el.classList.add('acc'); STATE['f-'+k] = 1; }
+  else {
+    const wrong = whichTerm(el.value);
+    fb.className = 'fb badt';
+    fb.innerHTML = `✗ Answer: <b>${esc(term.t)}</b><span class="why">💡 ${esc(term.d)}${wrong ? `<br>(${esc(wrong.t)} = ${esc(wrong.d)})` : ''}</span>`;
+    el.classList.add('bad'); STATE['f-'+k] = 0;
+  }
+  updateBox(); updateScore(); save();
+}
+function clearFill(k){ delete STATE['f-'+k]; const el = document.getElementById('f-'+k); el.classList.remove('ok','acc','bad'); const fb = document.getElementById('fb-f-'+k); fb.className='fb'; fb.innerHTML=''; }
+function updateBox(){
+  const used = new Set(FILL.map((f,k) => whichTerm(document.getElementById('f-'+k).value)).filter(Boolean).map(t => TERMS.indexOf(t)));
+  document.querySelectorAll('.chip').forEach(c => c.classList.toggle('used', used.has(+c.dataset.term)));
+}
+
+// ---- essays ----
+function meter(k){
+  const e = ESS[k], text = document.getElementById('e-'+k).value;
+  const sc = sentences(text).length, used = termsUsed(text), wc = (text.trim().match(/\S+/g)||[]).length;
+  const needT = e.preview ? 4 : 4, sOk = e.preview ? (sc >= 4 && sc <= 6) : sc >= 5;
+  document.getElementById('m-'+k).innerHTML = `<span class="${sOk ? 'good' : ''}">Sentences: ${sc}${e.preview ? ' (need 4–6)' : ' (aim for 5+)'}</span><span class="${used.length >= needT ? 'good' : ''}">Word-box words: ${used.length} (need ${needT}+)</span><span>Words: ${wc}</span>`;
+  document.getElementById('u-'+k).innerHTML = used.length ? 'Using: ' + used.map(t => `<b>${esc(t.t)}</b>`).join(', ') : 'No word-box words yet.';
+}
+function scoreEssay(k){
+  const e = ESS[k], text = document.getElementById('e-'+k).value;
+  const ss = sentences(text), sc = ss.length, used = termsUsed(text);
+  const vocab = Math.min(4, used.length);
+  const ideas = e.ideas.map(i => ({...i, hit: hasKw(text, i.k)}));
+  const ideaPts = Math.min(3, ideas.filter(i => i.hit).length);
+  let lenPts = e.preview ? ((sc >= 4 && sc <= 6) ? 2 : (sc === 3 || sc === 7) ? 1 : 0) : (sc >= 5 ? 2 : sc >= 3 ? 1 : 0);
+  const claim = sc > 0 && hasKw(ss[0], e.claim) ? 1 : 0;
+  const total = text.trim() ? vocab + ideaPts + lenPts + claim : 0;
+  return {total, vocab, ideaPts, lenPts, claim, ideas, used, sc, text};
+}
+function checkEssay(k){
+  const e = ESS[k], r = scoreEssay(k), box = document.getElementById('r-'+k);
+  STATE['e-'+k] = r.total;
+  const li = (ok, label, hint) => `<li class="${ok ? 'y' : 'n'}">${ok ? '✓' : '✗'} ${label}${!ok && hint ? `<span class="hint">💡 ${esc(hint)}</span>` : ''}</li>`;
+  box.innerHTML = `<div class="total">Estimated: ${r.total} / 10</div>
+    <ul>
+      ${li(r.vocab >= 4, `Word-box words: ${r.used.length} used → ${r.vocab}/4 pts`, 'Use at least 4 word-box words correctly.')}
+      ${li(r.ideaPts >= 3, `Key ideas covered → ${r.ideaPts}/3 pts`)}
+      ${r.ideas.map(i => `<li class="${i.hit ? 'y' : 'n'}" style="margin-left:14px">${i.hit ? '✓' : '○'} ${esc(i.l)}${i.hit ? '' : `<span class="hint">${esc(i.h)}</span>`}</li>`).join('')}
+      ${li(r.lenPts === 2, `Length: ${r.sc} sentences → ${r.lenPts}/2 pts`, e.preview ? 'Write 4–6 complete sentences.' : 'Write at least 5 complete sentences.')}
+      ${li(r.claim, `Topic sentence answers the question → ${r.claim}/1 pt`, 'Your FIRST sentence should directly answer the question.')}
+    </ul>
+    <div style="font-size:13px;color:var(--muted)">This is an estimate — it checks vocabulary, key ideas and structure. Your teacher also grades whether your facts are correct, so compare with the model below.</div>
+    <details style="margin-top:8px"><summary style="cursor:pointer;font-weight:700">Compare with a model answer</summary>
+      <div class="model">${highlight(e.model)}</div>
+      ${r.text.trim() ? `<div class="mine"><b>Yours:</b>\n${highlight(r.text)}</div>` : ''}
+    </details>`;
+  box.classList.add('show');
+  updateScore(); save();
+}
+
+// ---- sources ----
+function answerSrc(k, j, silent){
+  const s = SRC[k], btns = [...document.querySelectorAll(`#o-${k} button`)];
+  const right = s.opts.indexOf(s.a);
+  btns.forEach((b, i) => { b.disabled = true; if (i === right) b.classList.add('right'); if (i === j && j !== right) b.classList.add('wrong'); });
+  STATE['s-'+k] = j === right ? 1 : 0; STATE['sopt-'+k] = j;
+  const fb = document.getElementById('fb-s-'+k);
+  fb.className = 'fb ' + (j === right ? 'okt' : 'badt');
+  fb.innerHTML = (j === right ? '✓ Correct! ' : `✗ The answer is <b>${'ABCD'[right]}</b>. `) + `<span class="why">💡 ${esc(s.why)}</span>`;
+  if (!silent){ updateScore(); save(); }
+}
+
+// ---- scoring ----
+function updateScore(){
+  let pts = 0, checked = 0;
+  Object.entries(STATE).forEach(([k,v]) => { if (k.startsWith('sopt')) return; checked++; pts += v; });
+  document.getElementById('score').textContent = `${pts} / 40`;
+}
+function gradeAll(){
+  FILL.forEach((f,k) => checkFill(k));
+  ESS.forEach((e,k) => checkEssay(k));
+  const fp = FILL.reduce((a,f,k) => a + STATE['f-'+k], 0);
+  const ep = ESS.reduce((a,e,k) => a + STATE['e-'+k], 0);
+  const sp = SRC.reduce((a,s,k) => a + (STATE['s-'+k] || 0), 0);
+  const unanswered = SRC.filter((s,k) => STATE['s-'+k] == null).length;
+  const pts = fp + ep + sp, pct = Math.round(pts / 40 * 100);
+  const letter = pct >= 90 ? 'A' : pct >= 80 ? 'B' : pct >= 70 ? 'C' : pct >= 60 ? 'D' : 'F';
+  const color = {A:'#1d7a3e',B:'#2f6fb4',C:'#b07d00',D:'#c25a12',F:'#b3261e'}[letter];
+  const missed = FILL.map((f,k) => k).filter(k => !STATE['f-'+k]);
+  const res = document.getElementById('result');
+  res.innerHTML = `<div class="grade"><div class="letter" style="background:${color}">${letter}</div>
+     <div><div class="big">${pts} / 40</div><div>${pct}% ${pct >= 90 ? '— Excellent, you\'re ready!' : pct >= 80 ? '— Solid. Review the misses and try a new version.' : '— Study the flashcards, then take a new version.'}</div>
+     ${unanswered ? `<div style="color:var(--warn);font-size:14px">${unanswered} primary source question(s) not answered — counted as 0.</div>` : ''}</div></div>
+    <div class="secscore"><div>Fill in the Blank<br><b>${fp} / 15</b></div><div>Long Answers (est.)<br><b>${ep} / 20</b></div><div>Primary Sources<br><b>${sp} / 5</b></div></div>
+    ${missed.length ? `<h3 style="margin:22px 0 0">Vocab to review (${missed.length})</h3><ul class="missed">${missed.map(k => {
+      const t = TERMS[FILL[k].i], v = document.getElementById('f-'+k).value.trim();
+      return `<li>${v ? `<span class="yours">${esc(v)}</span> → ` : '<i>(blank)</i> → '}<span class="right">${esc(t.t)}</span><div style="color:var(--muted);font-size:13px">${esc(t.d)}</div></li>`; }).join('')}</ul>` : ''}
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:18px">
+      ${missed.length ? '<button class="blue" id="btnRetry">✏️ Retry missed blanks</button>' : ''}
+      <button class="primary" id="btnNew3">🔀 New test</button></div>`;
+  res.classList.add('show'); res.scrollIntoView({behavior:'smooth'});
+  const rt = document.getElementById('btnRetry');
+  if (rt) rt.onclick = () => { missed.forEach(k => { document.getElementById('f-'+k).value = ''; clearFill(k); }); updateBox(); updateScore(); save(); res.classList.remove('show'); const el = document.getElementById('f-'+missed[0]); el.scrollIntoView({behavior:'smooth', block:'center'}); setTimeout(() => el.focus(), 400); };
+  document.getElementById('btnNew3').onclick = newTest;
+}
+function clearAll(){ if (!confirm('Clear all answers on this version?')) return; store.set('h2-' + SEED, {}); build(SEED); window.scrollTo({top:0, behavior:'smooth'}); }
+function newTest(){ const s = 1000 + Math.floor(Math.random()*9000); history.replaceState(null,'','#v='+s); build(s); showTab('test'); window.scrollTo({top:0, behavior:'smooth'}); }
+
+// ---- events ----
+const test = document.getElementById('test');
+let lastFill = null;
+test.addEventListener('focusin', e => { if (e.target.matches('input.ans')) lastFill = e.target; });
+test.addEventListener('focusout', e => { if (e.target.matches('input.ans') && e.target.value.trim()) checkFill(+e.target.dataset.k); });
+test.addEventListener('input', e => {
+  if (e.target.matches('input.ans')){ const k = +e.target.dataset.k; if (STATE['f-'+k] != null){ clearFill(k); updateScore(); } updateBox(); }
+  if (e.target.matches('textarea')){ meter(+e.target.dataset.k); save(); }
+});
+test.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && e.target.matches('input.ans')){
+    e.preventDefault(); const k = +e.target.dataset.k; checkFill(k);
+    if (STATE['f-'+k] && k < 14) document.getElementById('f-'+(k+1)).focus();
+  }
+});
+test.addEventListener('pointerdown', e => { if (e.target.closest('.chip')) e.preventDefault(); });
+test.addEventListener('click', e => {
+  const chip = e.target.closest('.chip');
+  if (chip){
+    const target = lastFill && !lastFill.value.trim() ? lastFill : [...document.querySelectorAll('input.ans')].find(i => !i.value.trim());
+    if (!target) return;
+    target.value = TERMS[+chip.dataset.term].t; checkFill(+target.dataset.k);
+    const k = +target.dataset.k; const nx = [...document.querySelectorAll('input.ans')].find((i, j) => j > k && !i.value.trim());
+    if (nx){ nx.focus({preventScroll:true}); lastFill = nx; }
+    return;
+  }
+  const ck = e.target.closest('[data-check]'); if (ck) return checkEssay(+ck.dataset.check);
+  const opt = e.target.closest('[data-src]'); if (opt && !opt.disabled) answerSrc(+opt.dataset.src, +opt.dataset.opt);
+});
+document.getElementById('btnNew').onclick = newTest;
+document.getElementById('btnGrade').onclick = () => { showTab('test'); gradeAll(); };
+
+// ---- tabs ----
+function showTab(name){
+  document.querySelectorAll('.tabs button').forEach(b => b.classList.toggle('on', b.dataset.tab === name));
+  document.getElementById('tab-test').hidden = name !== 'test';
+  document.getElementById('tab-cards').hidden = name !== 'cards';
+  if (name !== 'test') document.getElementById('result').classList.remove('show');
+}
+document.querySelectorAll('.tabs button').forEach(b => b.onclick = () => showTab(b.dataset.tab));
+
+// ---- flashcards ----
+let deck = TERMS.map((t,i) => i), pos = 0, known = new Set(store.get('h2-known') || []);
+const card = document.getElementById('card');
+function showCard(){
+  if (!deck.length){ deck = TERMS.map((t,i) => i).filter(i => !known.has(i)); if (!deck.length){ known.clear(); deck = TERMS.map((t,i) => i); } pos = 0; }
+  pos = Math.max(0, Math.min(pos, deck.length - 1));
+  const t = TERMS[deck[pos]], rev = document.getElementById('fcReverse').checked;
+  card.classList.remove('flip');
+  setTimeout(() => {
+    document.getElementById('fcCat').textContent = document.getElementById('fcCat2').textContent = t.cat;
+    document.getElementById('fcFront').textContent = rev ? t.d : t.t;
+    document.getElementById('fcFront').style.fontSize = rev ? '17px' : '';
+    document.getElementById('fcFront').style.fontWeight = rev ? '500' : '';
+    document.getElementById('fcBack').innerHTML = rev ? `<div class="term">${esc(t.t)}</div>` : esc(t.d);
+  }, 150);
+  document.getElementById('fcStat').textContent = `Card ${pos+1} of ${deck.length} · Mastered ${known.size} / ${TERMS.length}`;
+}
+card.onclick = () => card.classList.toggle('flip');
+document.getElementById('fcGot').onclick = () => { known.add(deck[pos]); store.set('h2-known', [...known]); deck.splice(pos, 1); showCard(); };
+document.getElementById('fcAgain').onclick = () => { known.delete(deck[pos]); store.set('h2-known', [...known]); pos = (pos + 1) % deck.length; showCard(); };
+document.getElementById('fcPrev').onclick = () => { pos = (pos - 1 + deck.length) % deck.length; showCard(); };
+document.getElementById('fcShuffle').onclick = () => { R = Math.random; deck = shuffle(TERMS.map((t,i) => i).filter(i => !known.has(i))); pos = 0; showCard(); };
+document.getElementById('fcReverse').onchange = showCard;
+deck = TERMS.map((t,i) => i).filter(i => !known.has(i));
+document.getElementById('timeline').innerHTML = TIMELINE.map(([d,e]) => `<li><b>${esc(d)}</b> ${esc(e)}</li>`).join('');
+
+// ---- start ----
+const m = location.hash.match(/v=(\d+)/);
+const seed = m ? +m[1] : 1000 + Math.floor(Math.random()*9000);
+if (!m) history.replaceState(null,'','#v='+seed);
+build(seed);
+showCard();
+})();
+</script>
+</body>
+</html>
