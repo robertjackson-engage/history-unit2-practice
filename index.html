@@ -124,6 +124,21 @@ textarea:focus{border-color:var(--accent)}
 .timeline li{padding:4px 0 10px 16px;position:relative}
 .timeline li::before{content:"";position:absolute;left:-8px;top:10px;width:13px;height:13px;border-radius:50%;background:var(--gold)}
 .timeline li b{display:inline-block;min-width:88px;color:var(--accent)}
+.pv-q{font-size:20px;font-weight:800;margin:6px 0 2px}
+.pv-badge{display:inline-block;background:var(--accent-2);color:#fff;font-size:12px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;padding:3px 8px;border-radius:6px}
+.plan{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:14px 0}
+.plan div{background:var(--chip);border-radius:10px;padding:10px 12px;font-size:14px}
+.plan b{display:block;color:var(--accent);font-size:13px;letter-spacing:.04em;text-transform:uppercase}
+.pv-ans{border:2px solid var(--gold);border-radius:12px;padding:16px 18px;font-size:17px;line-height:1.7}
+.pv-ans mark{background:var(--hl);color:inherit;padding:0 2px;border-radius:3px;font-weight:600}
+.pv-ans ol{margin:0;padding-left:22px}
+.pv-ans li{margin:6px 0}
+.pv-ans .role{display:inline-block;font-size:11px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--gold);margin-right:6px}
+.facts{columns:2;font-size:14.5px}
+.facts li{break-inside:avoid;margin-bottom:4px}
+.cloze{font-size:16.5px;line-height:2.1}
+.cloze input.ans{width:12em}
+@media (max-width:700px){ .plan{grid-template-columns:1fr 1fr} .facts{columns:1} }
 @media (max-width:700px){
   .paper{padding:18px 16px 22px}
   .wordbox{grid-template-columns:1fr 1fr}
@@ -146,6 +161,7 @@ textarea:focus{border-color:var(--accent)}
 <main class="wrap">
   <div class="tabs">
     <button class="on" data-tab="test">📝 Practice Test</button>
+    <button data-tab="preview">⭐ Preview Question</button>
     <button data-tab="cards">🃏 Vocab Flashcards</button>
   </div>
 
@@ -158,6 +174,52 @@ textarea:focus{border-color:var(--accent)}
       Paragraphs get an <b>estimated</b> score plus a model answer to compare. <b>New test</b> gives you different questions.
     </div>
     <div id="test"></div>
+  </section>
+
+  <section class="paper" id="tab-preview" hidden>
+    <span class="pv-badge">Definitely on the test</span>
+    <div class="pv-q">How successful was the French Revolution?</div>
+    <p class="sub">Requirements: use at least <b>4 words from the word box</b> · write <b>4–6 sentences</b>.</p>
+
+    <h2 class="part">1 · The plan <span>remember: Claim → Success → Failure → Big picture</span></h2>
+    <div class="plan">
+      <div><b>1. Claim</b>Answer the question: it was <i>partly</i> successful.</div>
+      <div><b>2. Success</b>Ended Divine Right; Rights of Man; Napoleonic Code (equality before the law).</div>
+      <div><b>3. Failure</b>Reign of Terror; Napoleon became emperor; Congress of Vienna brought kings back.</div>
+      <div><b>4. Big picture</b>Its ideas inspired revolutions everywhere (Haiti, Latin America).</div>
+    </div>
+
+    <h2 class="part">2 · The answer <span>6 sentences · 10 word-box words (highlighted)</span></h2>
+    <div class="pv-ans"><ol id="pvAnswer"></ol></div>
+
+    <h2 class="part">3 · Short version <span>4 sentences · exactly 4 word-box words</span></h2>
+    <p class="sub">If time is tight, this version still meets every requirement.</p>
+    <div class="pv-ans" id="pvShort"></div>
+
+    <h2 class="part">4 · Facts to have ready</h2>
+    <ul class="facts">
+      <li><b>Third Estate</b> — 97% of France; paid almost all the taxes</li>
+      <li><b>1789</b> — Tennis Court Oath; Bastille; Declaration of the Rights of Man</li>
+      <li><b>Rights of Man</b> — "Men are born and remain free and equal in rights"</li>
+      <li><b>1793</b> — Louis XVI executed by guillotine</li>
+      <li><b>Reign of Terror</b> (1793–94) — Robespierre; about 17,000 officially executed</li>
+      <li><b>1799 / 1804</b> — Napoleon seizes power / crowns himself emperor</li>
+      <li><b>Napoleonic Code</b> — equality before the law (but fewer rights for women)</li>
+      <li><b>Congress of Vienna</b> (1814–15) — restored kings and the balance of power</li>
+      <li><b>Legacy</b> — inspired Toussaint L'Ouverture (Haiti) and Simón Bolívar</li>
+      <li><b>Other sides you could argue:</b> "mostly successful" (ideas lasted) or "mostly a failure" (ended with an emperor and a king again). Any side is OK if you back it up.</li>
+    </ul>
+
+    <h2 class="part">5 · Drill: fill in the missing words <span>type, then Enter</span></h2>
+    <div class="cloze" id="pvCloze"></div>
+    <div style="margin-top:10px"><button id="pvClozeReset">↺ Reset drill</button> <span class="fc-stat" id="pvClozeScore"></span></div>
+
+    <h2 class="part">6 · Write it from memory</h2>
+    <p class="sub">Cover the answer above and write it yourself. It doesn't have to be word-for-word — just hit all four parts of the plan.</p>
+    <textarea id="pvWrite" placeholder="The French Revolution was partly successful…"></textarea>
+    <div class="meter" id="pvMeter"></div><div class="used-terms" id="pvUsed"></div>
+    <div style="margin-top:8px"><button class="blue" id="pvCheck">Check my answer</button></div>
+    <div class="rubric" id="pvRubric"></div>
   </section>
 
   <section class="paper" id="tab-cards" hidden>
@@ -258,10 +320,10 @@ const TERMS = [
  {t:'Miguel Hidalgo', al:['miguel hidalgo','hidalgo','father hidalgo','padre hidalgo'], cat:'Latin America', d:'Mexican priest who started Mexico\'s fight for independence in 1810 with the "Grito de Dolores" (Cry of Dolores); led Indigenous and mestizo followers; executed in 1811.',
   s:['Mexico\'s fight for independence began in 1810 when the priest ___ rang his church bell and gave the "Grito de Dolores."',
      'The Mexican priest who led an army of Indigenous people and mestizos against Spanish rule and was executed in 1811 was ___.']},
- {t:'Jose de San Martin', al:['jose de san martin','san martin','jose san martin'], cat:'Latin America', d:'Argentine general who led an army across the Andes to free Chile and helped win independence for Argentina and Peru; later stepped aside for Bolívar.',
+ {t:'Jose de San Martin', al:['jose de san martin','san martin','jose san martin','José de San Martín'], cat:'Latin America', d:'Argentine general who led an army across the Andes to free Chile and helped win independence for Argentina and Peru; later stepped aside for Bolívar.',
   s:['___ led an army across the Andes Mountains to free Chile and helped win independence for Argentina and Peru.',
      'The liberator of southern South America, who stepped aside and let Bolívar finish the fight, was ___.']},
- {t:'Simon Bolivar', al:['simon bolivar','bolivar'], cat:'Latin America', d:'"The Liberator." Venezuelan-born Creole who won independence for Venezuela, Colombia, Ecuador, Peru and Bolivia (named after him); dreamed of a united Gran Colombia.',
+ {t:'Simon Bolivar', al:['simon bolivar','bolivar','Simón Bolívar'], cat:'Latin America', d:'"The Liberator." Venezuelan-born Creole who won independence for Venezuela, Colombia, Ecuador, Peru and Bolivia (named after him); dreamed of a united Gran Colombia.',
   s:['Known as "The Liberator," ___ won independence for Venezuela, Colombia and Ecuador from Spain.',
      'The country of Bolivia is named after the Venezuelan-born revolutionary ___.']},
  {t:'Toussaint L\'Ouverture', al:['toussaint louverture','toussaint l ouverture','toussaint louverture','toussaint','louverture','l ouverture'], cat:'Latin America', d:'Formerly enslaved man who led the revolution in the French colony of Saint-Domingue starting in 1791; it became Haiti (1804), the first independent Black republic.',
@@ -369,7 +431,7 @@ const PREVIEW = {
     {l:'A failure or cost (Terror, Napoleon, kings returned)', h:'e.g. Reign of Terror killed thousands; Napoleon became emperor (a new all-powerful ruler); Congress of Vienna brought back a king.', k:['terror','guillotine','executed','killed','violen','napoleon','emperor','dictator','congress of vienna','restored','king returned','robespierre']},
     {l:'Long-term impact', h:'e.g. its ideas inspired Latin American revolutions (Haiti, Bolívar) and later democracies.', k:['inspire','spread','latin america','haiti','bolivar','toussaint','hidalgo','influence','today','future','world']}
   ],
-  model:'The French Revolution was only partly successful. It succeeded in ending absolute monarchy and the Divine Right of Kings when the Third Estate took power and Louis XVI was executed. The Declaration of the Rights of Man spread the ideas of liberty and equality, and later the Napoleonic Code kept equality before the law. However, the Reign of Terror killed thousands of people, and Napoleon Bonaparte made himself emperor, so France traded one all-powerful ruler for another. In the end, the Congress of Vienna brought back a king, but the Revolution\'s ideas kept inspiring people around the world, including in Haiti and Latin America.'
+  model:'The French Revolution was partly successful: it spread powerful new ideas about rights, but it did not create a stable democracy right away. It succeeded in ending the Divine Right of Kings, because the Third Estate took power and King Louis XVI was executed in 1793. The Declaration of the Rights of Man said that men are "born and remain free and equal in rights," and later the Napoleonic Code kept equality before the law. However, during the Reign of Terror about 17,000 people were executed, so the Revolution turned against its own ideals of liberty. Then Napoleon Bonaparte crowned himself emperor, and after his defeat the Congress of Vienna restored kings to power in Europe. Even so, the Revolution\'s ideas inspired leaders like Toussaint L\'Ouverture and Simón Bolívar, so in the long run it changed the world.'
 };
 const ESSAYS = [
  {q:'How did Enlightenment ideas influence the American and French Revolutions?', req:'Answer in a paragraph (5+ sentences) using words from the word box.',
@@ -682,6 +744,7 @@ function showTab(name){
   document.querySelectorAll('.tabs button').forEach(b => b.classList.toggle('on', b.dataset.tab === name));
   document.getElementById('tab-test').hidden = name !== 'test';
   document.getElementById('tab-cards').hidden = name !== 'cards';
+  document.getElementById('tab-preview').hidden = name !== 'preview';
   if (name !== 'test') document.getElementById('result').classList.remove('show');
 }
 document.querySelectorAll('.tabs button').forEach(b => b.onclick = () => showTab(b.dataset.tab));
@@ -711,6 +774,59 @@ document.getElementById('fcShuffle').onclick = () => { R = Math.random; deck = s
 document.getElementById('fcReverse').onchange = showCard;
 deck = TERMS.map((t,i) => i).filter(i => !known.has(i));
 document.getElementById('timeline').innerHTML = TIMELINE.map(([d,e]) => `<li><b>${esc(d)}</b> ${esc(e)}</li>`).join('');
+
+// ---- preview question tab ----
+const PV_ROLES = ['Claim','Success','Success','Failure','Failure','Big picture'];
+const PV_SENT = PREVIEW.model.match(/[^.]+?(?:\."|\.)(?=\s|$)/g).map(x => x.trim());
+document.getElementById('pvAnswer').innerHTML = PV_SENT.map((x, i) => `<li><span class="role">${PV_ROLES[i] || ''}</span>${highlight(x)}</li>`).join('');
+const PV_SHORT = 'The French Revolution was partly successful. It ended the Divine Right of Kings and gave France the Declaration of the Rights of Man, which promised liberty and equality. However, the Reign of Terror killed thousands of people, and Napoleon Bonaparte made himself emperor, so France ended up with another all-powerful ruler. In the long run, though, its ideas spread around the world and inspired new revolutions.';
+document.getElementById('pvShort').innerHTML = highlight(PV_SHORT);
+const PV_BLANKS = ['Divine Right of Kings','Third Estate','Louis XVI','Declaration of the Rights of Man','Napoleonic Code','Reign of Terror','Napoleon Bonaparte','Congress of Vienna',"Toussaint L'Ouverture",'Simón Bolívar'];
+function buildCloze(){
+  let h = esc(PREVIEW.model);
+  PV_BLANKS.forEach((b, i) => { h = h.replace(esc(b), `<input class="ans" id="pvc-${i}" data-b="${i}" autocomplete="off" autocapitalize="off" spellcheck="false">`); });
+  document.getElementById('pvCloze').innerHTML = h;
+  document.getElementById('pvClozeScore').textContent = '';
+}
+function pvTerm(b){ return TERMS.find(t => t.al.map(norm).includes(norm(b))); }
+function checkCloze(el){
+  const term = pvTerm(PV_BLANKS[+el.dataset.b]), r = matchTerm(el.value, term);
+  el.classList.remove('ok','acc','bad'); el.classList.add(r === 'ok' ? 'ok' : r === 'acc' ? 'acc' : 'bad');
+  el.title = r === 'ok' ? '' : term.t;
+  if (r === 'bad' || r === 'empty') el.placeholder = term.t;
+  const all = [...document.querySelectorAll('#pvCloze input')], good = all.filter(i => i.classList.contains('ok') || i.classList.contains('acc')).length;
+  document.getElementById('pvClozeScore').textContent = `${good} / ${all.length} correct` + (good === all.length ? ' 🎉 Now try writing it from memory below!' : '');
+}
+const cz = document.getElementById('pvCloze');
+cz.addEventListener('focusout', e => { if (e.target.matches('input') && e.target.value.trim()) checkCloze(e.target); });
+cz.addEventListener('keydown', e => { if (e.key === 'Enter' && e.target.matches('input')){ e.preventDefault(); checkCloze(e.target); const nx = document.getElementById('pvc-' + (+e.target.dataset.b + 1)); if (nx && !e.target.classList.contains('bad')) nx.focus(); } });
+cz.addEventListener('input', e => { if (e.target.matches('input')) e.target.classList.remove('ok','acc','bad'); });
+document.getElementById('pvClozeReset').onclick = buildCloze;
+buildCloze();
+const pvW = document.getElementById('pvWrite');
+pvW.value = store.get('h2-pvwrite') || '';
+function pvMeter(){
+  const text = pvW.value, sc = sentences(text).length, used = termsUsed(text);
+  document.getElementById('pvMeter').innerHTML = `<span class="${sc >= 4 && sc <= 6 ? 'good' : ''}">Sentences: ${sc} (need 4–6)</span><span class="${used.length >= 4 ? 'good' : ''}">Word-box words: ${used.length} (need 4+)</span>`;
+  document.getElementById('pvUsed').innerHTML = used.length ? 'Using: ' + used.map(t => `<b>${esc(t.t)}</b>`).join(', ') : '';
+}
+pvW.addEventListener('input', () => { pvMeter(); store.set('h2-pvwrite', pvW.value); });
+pvMeter();
+document.getElementById('pvCheck').onclick = () => {
+  const text = pvW.value, ss = sentences(text), sc = ss.length, used = termsUsed(text);
+  const ideas = PREVIEW.ideas.map(i => ({...i, hit: hasKw(text, i.k)}));
+  const li = (ok, label, hint) => `<li class="${ok ? 'y' : 'n'}">${ok ? '✓' : '✗'} ${label}${!ok && hint ? `<span class="hint">💡 ${esc(hint)}</span>` : ''}</li>`;
+  const box = document.getElementById('pvRubric');
+  box.innerHTML = `<ul>
+    ${li(used.length >= 4, `${used.length} word-box words (need 4+)`, 'Use at least 4: e.g. Divine Right of Kings, Declaration of the Rights of Man, Reign of Terror, Napoleon Bonaparte.')}
+    ${li(sc >= 4 && sc <= 6, `${sc} sentences (need 4–6)`, sc > 6 ? 'Too long — combine or cut sentences.' : 'Write at least 4 complete sentences.')}
+    ${ideas.map(i => li(i.hit, esc(i.l), i.h)).join('')}
+  </ul>
+  ${used.length >= 4 && sc >= 4 && sc <= 6 && ideas.every(i => i.hit) ? '<div style="color:var(--ok);font-weight:800">✅ This meets every requirement. You\'re ready for this question!</div>' : ''}
+  <details style="margin-top:8px"><summary style="cursor:pointer;font-weight:700">Compare side by side</summary>
+    <div class="mine"><b>Yours:</b>\n${highlight(text)}</div><div class="model">${highlight(PREVIEW.model)}</div></details>`;
+  box.classList.add('show');
+};
 
 // ---- start ----
 const m = location.hash.match(/v=(\d+)/);
