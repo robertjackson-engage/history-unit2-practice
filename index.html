@@ -152,7 +152,7 @@ textarea:focus{border-color:var(--accent)}
 <header class="top">
   <div class="wrap">
     <div class="brand">Unit 2 · Age of Revolutions<small>Practice test + vocab flashcards</small></div>
-    <div class="score" id="score">0 / 40</div>
+    <div class="score" id="score">0 / 50</div>
     <button id="btnNew" title="Different questions, same format">🔀 New test</button>
     <button id="btnGrade" class="primary">✅ Grade it</button>
   </div>
@@ -161,15 +161,15 @@ textarea:focus{border-color:var(--accent)}
 <main class="wrap">
   <div class="tabs">
     <button class="on" data-tab="test">📝 Practice Test</button>
-    <button data-tab="preview">⭐ Preview Question</button>
+    <button data-tab="preview">⭐ Test Questions</button>
     <button data-tab="cards">🃏 Vocab Flashcards</button>
   </div>
 
   <section class="paper" id="tab-test">
     <h1>Unit 2 Practice Test</h1>
-    <p class="sub">Enlightenment · American & French Revolutions · Napoleon · Latin American Independence &nbsp;|&nbsp; Version <b id="ver">—</b> &nbsp;|&nbsp; 40 pts</p>
+    <p class="sub">Enlightenment · American & French Revolutions · Napoleon · Latin American Independence &nbsp;|&nbsp; Version <b id="ver">—</b> &nbsp;|&nbsp; 50 pts</p>
     <div class="howto">
-      <b>Same format as the real test:</b> 15 fill-in-the-blank (word box) · 2 long answers (the preview question + 1 more) · 5 primary sources.
+      <b>Same format as the real test:</b> 15 fill-in-the-blank (word box) · 3 long answers (the preview question, causes of revolutions, effects of revolutions) · 5 primary sources.
       <br>Type an answer and press <b>Enter</b> to check it right away. You can tap a word in the box to drop it into the blank you're on.
       Paragraphs get an <b>estimated</b> score plus a model answer to compare. <b>New test</b> gives you different questions.
     </div>
@@ -177,7 +177,7 @@ textarea:focus{border-color:var(--accent)}
   </section>
 
   <section class="paper" id="tab-preview" hidden>
-    <span class="pv-badge">Definitely on the test</span>
+    <span class="pv-badge">Definitely on the test</span> <span class="fc-stat">Question 1 of 3 · scroll down for Questions 2 &amp; 3</span>
     <div class="pv-q">How successful was the French Revolution?</div>
     <p class="sub">Requirements: use at least <b>4 words from the word box</b> · write <b>4–6 sentences</b>.</p>
 
@@ -220,6 +220,7 @@ textarea:focus{border-color:var(--accent)}
     <div class="meter" id="pvMeter"></div><div class="used-terms" id="pvUsed"></div>
     <div style="margin-top:8px"><button class="blue" id="pvCheck">Check my answer</button></div>
     <div class="rubric" id="pvRubric"></div>
+    <div id="kq"></div>
   </section>
 
   <section class="paper" id="tab-cards" hidden>
@@ -433,6 +434,32 @@ const PREVIEW = {
   ],
   model:'The French Revolution was partly successful: it spread powerful new ideas about rights, but it did not create a stable democracy right away. It succeeded in ending the Divine Right of Kings, because the Third Estate took power and King Louis XVI was executed in 1793. The Declaration of the Rights of Man said that men are "born and remain free and equal in rights," and later the Napoleonic Code kept equality before the law. However, during the Reign of Terror about 17,000 people were executed, so the Revolution turned against its own ideals of liberty. Then Napoleon Bonaparte crowned himself emperor, and after his defeat the Congress of Vienna restored kings to power in Europe. Even so, the Revolution\'s ideas inspired leaders like Toussaint L\'Ouverture and Simón Bolívar, so in the long run it changed the world.'
 };
+const CAUSES = {
+  q:'What are some of the causes of revolutions?', req:'Use at least 4 words from the word box. Write 4–6 sentences.', preview:true,
+  claim:['cause','caused','because','led to','reason','started','sparked'],
+  ideas:[
+   {l:'Enlightenment ideas', h:'e.g. Rousseau, Montesquieu and Voltaire taught natural rights and that power comes from the people, not the Divine Right of Kings.', k:['enlightenment','rousseau','montesquieu','voltaire','wollstonecraft','natural rights','locke','general will','reason']},
+   {l:'Inequality / unfair treatment', h:'e.g. the Third Estate paid nearly all the taxes; enslaved people in Haiti; Creoles shut out of power by Spain.', k:['third estate','estate','unequal','inequal','privilege','slave','enslaved','creole','peninsular','unfair']},
+   {l:'Money problems (debt, taxes, food)', h:'e.g. France was deep in debt under Louis XVI; colonists were taxed without representation; bread prices soared.', k:['tax','debt','bankrupt','money','bread','food','hunger','starv']},
+   {l:'Unfair rulers or inspiration from other revolutions', h:'e.g. absolute kings; the Declaration of Independence inspired France; the French Revolution inspired Haiti and Latin America.', k:['divine right','absolute','louis','king','declaration of independence','american revolution','inspired','napoleon']}
+  ],
+  roles:['Claim','Cause 1: Ideas','Cause 2: Inequality','Cause 3: Money','Cause 4: Inspiration','Conclusion'],
+  plan:[['Claim','Revolutions had several causes: ideas, inequality, money and other revolutions.'],['Ideas','Enlightenment: Rousseau, Montesquieu, natural rights vs. Divine Right of Kings.'],['Unfairness','Third Estate paid the taxes; slavery in Haiti; Louis XVI\'s debt.'],['Inspiration','Declaration of Independence → France → Toussaint & Bolívar.']],
+  model:'Revolutions were caused by new ideas, inequality, money problems, and the example of other revolutions. Enlightenment thinkers like Rousseau and Montesquieu taught that people have natural rights and that government should get its power from the people, not from the Divine Right of Kings. Inequality also made people angry, because in France the Third Estate paid almost all the taxes but had almost no power, and in Haiti enslaved people were treated brutally. Money problems mattered too, since Louis XVI\'s France was deeply in debt and American colonists were angry about being taxed without representation. Revolutions also inspired each other, as the Declaration of Independence influenced the French, and the French Revolution inspired Toussaint L\'Ouverture and Simón Bolívar. When people believed they had rights and saw that their government was unfair, they were ready to fight for change.'
+};
+const EFFECTS = {
+  q:'What are some of the effects of revolutions?', req:'Use at least 4 words from the word box. Write 4–6 sentences.', preview:true,
+  claim:['effect','changed','change','result','led to','impact','because of'],
+  ideas:[
+   {l:'New governments / end of absolute monarchy', h:'e.g. the Divine Right of Kings was replaced by written plans like the US Constitution and the Declaration of the Rights of Man.', k:['constitution','rights of man','republic','divine right','democracy','absolute','bill of rights','ended','new government']},
+   {l:'Spread of liberty and equality', h:'e.g. ideas of liberty and equality spread; the Napoleonic Code brought equality before the law across Europe.', k:['spread','liberty','equal','napoleonic code','freedom','rights','nationalism']},
+   {l:'Violence and new strong rulers', h:'e.g. the Reign of Terror; Napoleon Bonaparte made himself emperor; wars across Europe.', k:['terror','guillotine','napoleon','emperor','war','killed','violen','executed','dictator']},
+   {l:'Reaction and independence movements', h:'e.g. the Congress of Vienna brought kings back; Haiti (Toussaint L\'Ouverture) and Latin America (Bolívar, Hidalgo, San Martín) won independence.', k:['congress of vienna','haiti','toussaint','bolivar','hidalgo','san martin','latin america','independence','restored']}
+  ],
+  roles:['Claim','Effect 1: New governments','Effect 2: Spread of ideas','Effect 3: Violence','Effect 4: Reaction','Effect 5: Independence'],
+  plan:[['Claim','Revolutions changed the world in good and bad ways.'],['Good','End of Divine Right; US Constitution; Rights of Man; Napoleonic Code.'],['Bad','Reign of Terror; Napoleon became emperor; Congress of Vienna brought kings back.'],['Big effect','Independence in Haiti (Toussaint) and Latin America (Bolívar, Hidalgo).']],
+  model:'Revolutions changed the world in both good and bad ways. One major effect was the end of absolute monarchy, as the Divine Right of Kings was replaced by governments based on written documents like the US Constitution and the Declaration of the Rights of Man. Revolutions also spread the ideas of liberty and equality, and the Napoleonic Code brought equality before the law to much of Europe. However, revolutions could be very violent, like the Reign of Terror in France, and they sometimes ended with a new all-powerful ruler such as Napoleon Bonaparte. After Napoleon, the Congress of Vienna tried to bring back the old kings, but it could not stop the spread of revolutionary ideas. Those ideas led to independence in Haiti under Toussaint L\'Ouverture and across Latin America under leaders like Simón Bolívar and Miguel Hidalgo.'
+};
 const ESSAYS = [
  {q:'How did Enlightenment ideas influence the American and French Revolutions?', req:'Answer in a paragraph (5+ sentences) using words from the word box.',
   claim:['enlightenment','influence','inspired','ideas'],
@@ -542,7 +569,7 @@ function build(seed){
   FILL = shuffle(TERMS.map((t,i) => i)).slice(0,15).map(i => ({i, s: pick(TERMS[i].s)}));
   const visual = shuffle(SOURCES.filter(s => s.kind !== 'Text')).slice(0,1);
   SRC = shuffle([...visual, ...shuffle(SOURCES.filter(s => s.kind === 'Text')).slice(0,4)]).map(s => ({...s, opts: shuffle([s.a, ...s.w])}));
-  ESS = [PREVIEW, pick(ESSAYS)];
+  ESS = [PREVIEW, CAUSES, EFFECTS];
 
   let h = '';
   // Part 1
@@ -557,7 +584,7 @@ function build(seed){
   h += `</ol>`;
 
   // Part 2
-  h += `<h2 class="part">Part 2 · Long Answer <span>2 × 10 pts = 20 pts</span></h2>
+  h += `<h2 class="part">Part 2 · Long Answer <span>3 × 10 pts = 30 pts</span></h2>
     <p class="sub">Write a paragraph. Use words from the word box (they light up when you use them). Click <b>Check my paragraph</b> for an estimated score and a model answer.</p>`;
   ESS.forEach((e, k) => {
     h += `<div class="essay"><div class="prompt">${k+1}. ${esc(e.q)}</div><div class="req">${esc(e.req)}</div>
@@ -623,8 +650,8 @@ function updateBox(){
 function meter(k){
   const e = ESS[k], text = document.getElementById('e-'+k).value;
   const sc = sentences(text).length, used = termsUsed(text), wc = (text.trim().match(/\S+/g)||[]).length;
-  const needT = e.preview ? 4 : 4, sOk = e.preview ? (sc >= 4 && sc <= 6) : sc >= 5;
-  document.getElementById('m-'+k).innerHTML = `<span class="${sOk ? 'good' : ''}">Sentences: ${sc}${e.preview ? ' (need 4–6)' : ' (aim for 5+)'}</span><span class="${used.length >= needT ? 'good' : ''}">Word-box words: ${used.length} (need ${needT}+)</span><span>Words: ${wc}</span>`;
+  const needT = 4, sOk = sc >= 4 && sc <= 6;
+  document.getElementById('m-'+k).innerHTML = `<span class="${sOk ? 'good' : ''}">Sentences: ${sc}${' (need 4–6)'}</span><span class="${used.length >= needT ? 'good' : ''}">Word-box words: ${used.length} (need ${needT}+)</span><span>Words: ${wc}</span>`;
   document.getElementById('u-'+k).innerHTML = used.length ? 'Using: ' + used.map(t => `<b>${esc(t.t)}</b>`).join(', ') : 'No word-box words yet.';
 }
 function scoreEssay(k){
@@ -633,7 +660,7 @@ function scoreEssay(k){
   const vocab = Math.min(4, used.length);
   const ideas = e.ideas.map(i => ({...i, hit: hasKw(text, i.k)}));
   const ideaPts = Math.min(3, ideas.filter(i => i.hit).length);
-  let lenPts = e.preview ? ((sc >= 4 && sc <= 6) ? 2 : (sc === 3 || sc === 7) ? 1 : 0) : (sc >= 5 ? 2 : sc >= 3 ? 1 : 0);
+  let lenPts = (sc >= 4 && sc <= 6) ? 2 : (sc === 3 || sc === 7) ? 1 : 0;
   const claim = sc > 0 && hasKw(ss[0], e.claim) ? 1 : 0;
   const total = text.trim() ? vocab + ideaPts + lenPts + claim : 0;
   return {total, vocab, ideaPts, lenPts, claim, ideas, used, sc, text};
@@ -647,7 +674,7 @@ function checkEssay(k){
       ${li(r.vocab >= 4, `Word-box words: ${r.used.length} used → ${r.vocab}/4 pts`, 'Use at least 4 word-box words correctly.')}
       ${li(r.ideaPts >= 3, `Key ideas covered → ${r.ideaPts}/3 pts`)}
       ${r.ideas.map(i => `<li class="${i.hit ? 'y' : 'n'}" style="margin-left:14px">${i.hit ? '✓' : '○'} ${esc(i.l)}${i.hit ? '' : `<span class="hint">${esc(i.h)}</span>`}</li>`).join('')}
-      ${li(r.lenPts === 2, `Length: ${r.sc} sentences → ${r.lenPts}/2 pts`, e.preview ? 'Write 4–6 complete sentences.' : 'Write at least 5 complete sentences.')}
+      ${li(r.lenPts === 2, `Length: ${r.sc} sentences → ${r.lenPts}/2 pts`, 'Write 4–6 complete sentences.')}
       ${li(r.claim, `Topic sentence answers the question → ${r.claim}/1 pt`, 'Your FIRST sentence should directly answer the question.')}
     </ul>
     <div style="font-size:13px;color:var(--muted)">This is an estimate — it checks vocabulary, key ideas and structure. Your teacher also grades whether your facts are correct, so compare with the model below.</div>
@@ -675,7 +702,7 @@ function answerSrc(k, j, silent){
 function updateScore(){
   let pts = 0, checked = 0;
   Object.entries(STATE).forEach(([k,v]) => { if (k.startsWith('sopt')) return; checked++; pts += v; });
-  document.getElementById('score').textContent = `${pts} / 40`;
+  document.getElementById('score').textContent = `${pts} / 50`;
 }
 function gradeAll(){
   FILL.forEach((f,k) => checkFill(k));
@@ -684,15 +711,15 @@ function gradeAll(){
   const ep = ESS.reduce((a,e,k) => a + STATE['e-'+k], 0);
   const sp = SRC.reduce((a,s,k) => a + (STATE['s-'+k] || 0), 0);
   const unanswered = SRC.filter((s,k) => STATE['s-'+k] == null).length;
-  const pts = fp + ep + sp, pct = Math.round(pts / 40 * 100);
+  const pts = fp + ep + sp, pct = Math.round(pts / 50 * 100);
   const letter = pct >= 90 ? 'A' : pct >= 80 ? 'B' : pct >= 70 ? 'C' : pct >= 60 ? 'D' : 'F';
   const color = {A:'#1d7a3e',B:'#2f6fb4',C:'#b07d00',D:'#c25a12',F:'#b3261e'}[letter];
   const missed = FILL.map((f,k) => k).filter(k => !STATE['f-'+k]);
   const res = document.getElementById('result');
   res.innerHTML = `<div class="grade"><div class="letter" style="background:${color}">${letter}</div>
-     <div><div class="big">${pts} / 40</div><div>${pct}% ${pct >= 90 ? '— Excellent, you\'re ready!' : pct >= 80 ? '— Solid. Review the misses and try a new version.' : '— Study the flashcards, then take a new version.'}</div>
+     <div><div class="big">${pts} / 50</div><div>${pct}% ${pct >= 90 ? '— Excellent, you\'re ready!' : pct >= 80 ? '— Solid. Review the misses and try a new version.' : '— Study the flashcards, then take a new version.'}</div>
      ${unanswered ? `<div style="color:var(--warn);font-size:14px">${unanswered} primary source question(s) not answered — counted as 0.</div>` : ''}</div></div>
-    <div class="secscore"><div>Fill in the Blank<br><b>${fp} / 15</b></div><div>Long Answers (est.)<br><b>${ep} / 20</b></div><div>Primary Sources<br><b>${sp} / 5</b></div></div>
+    <div class="secscore"><div>Fill in the Blank<br><b>${fp} / 15</b></div><div>Long Answers (est.)<br><b>${ep} / 30</b></div><div>Primary Sources<br><b>${sp} / 5</b></div></div>
     ${missed.length ? `<h3 style="margin:22px 0 0">Vocab to review (${missed.length})</h3><ul class="missed">${missed.map(k => {
       const t = TERMS[FILL[k].i], v = document.getElementById('f-'+k).value.trim();
       return `<li>${v ? `<span class="yours">${esc(v)}</span> → ` : '<i>(blank)</i> → '}<span class="right">${esc(t.t)}</span><div style="color:var(--muted);font-size:13px">${esc(t.d)}</div></li>`; }).join('')}</ul>` : ''}
@@ -827,6 +854,41 @@ document.getElementById('pvCheck').onclick = () => {
     <div class="mine"><b>Yours:</b>\n${highlight(text)}</div><div class="model">${highlight(PREVIEW.model)}</div></details>`;
   box.classList.add('show');
 };
+
+// ---- known questions 2 & 3 ----
+document.getElementById('kq').innerHTML = [CAUSES, EFFECTS].map((e, n) => {
+  const sents = e.model.match(/[^.]+?(?:\."|\.)(?=\s|$)/g).map(x => x.trim());
+  return `<div style="margin-top:46px;padding-top:20px;border-top:3px solid var(--gold)">
+    <span class="pv-badge">On the test</span> <span class="fc-stat">Question ${n+2} of 3</span>
+    <div class="pv-q">${esc(e.q)}</div>
+    <p class="sub">Requirements: use at least <b>4 words from the word box</b> · write <b>4–6 sentences</b>.</p>
+    <h2 class="part">The plan</h2>
+    <div class="plan">${e.plan.map(([a,b],i) => `<div><b>${i+1}. ${esc(a)}</b>${esc(b)}</div>`).join('')}</div>
+    <h2 class="part">The answer <span>${sents.length} sentences · ${termsUsed(e.model).length} word-box words (highlighted)</span></h2>
+    <div class="pv-ans"><ol>${sents.map((x,i) => `<li><span class="role">${esc(e.roles[i] || '')}</span>${highlight(x)}</li>`).join('')}</ol></div>
+    <h2 class="part">Write it from memory</h2>
+    <textarea id="kqw-${n}" placeholder="${esc(e.model.split(' ').slice(0,6).join(' '))}…"></textarea>
+    <div class="meter" id="kqm-${n}"></div>
+    <div style="margin-top:8px"><button class="blue" id="kqc-${n}">Check my answer</button></div>
+    <div class="rubric" id="kqr-${n}"></div></div>`;
+}).join('');
+[CAUSES, EFFECTS].forEach((e, n) => {
+  const ta = document.getElementById('kqw-'+n), key = 'h2-kq-'+n;
+  ta.value = store.get(key) || '';
+  const m = () => { const sc = sentences(ta.value).length, used = termsUsed(ta.value);
+    document.getElementById('kqm-'+n).innerHTML = `<span class="${sc >= 4 && sc <= 6 ? 'good' : ''}">Sentences: ${sc} (need 4–6)</span><span class="${used.length >= 4 ? 'good' : ''}">Word-box words: ${used.length} (need 4+)</span>${used.length ? '<span>' + used.map(t => esc(t.t)).join(', ') + '</span>' : ''}`; };
+  ta.addEventListener('input', () => { m(); store.set(key, ta.value); }); m();
+  document.getElementById('kqc-'+n).onclick = () => {
+    const text = ta.value, sc = sentences(text).length, used = termsUsed(text), ideas = e.ideas.map(i => ({...i, hit: hasKw(text, i.k)}));
+    const li = (ok, label, hint) => `<li class="${ok ? 'y' : 'n'}">${ok ? '✓' : '✗'} ${label}${!ok && hint ? `<span class="hint">💡 ${esc(hint)}</span>` : ''}</li>`;
+    const good = used.length >= 4 && sc >= 4 && sc <= 6 && ideas.filter(i => i.hit).length >= 3;
+    const box = document.getElementById('kqr-'+n);
+    box.innerHTML = `<ul>${li(used.length >= 4, `${used.length} word-box words (need 4+)`, 'Use at least 4 word-box words.')}${li(sc >= 4 && sc <= 6, `${sc} sentences (need 4–6)`, sc > 6 ? 'Too long — combine or cut sentences.' : 'Write at least 4 complete sentences.')}${ideas.map(i => li(i.hit, esc(i.l), i.h)).join('')}</ul>
+      ${good ? '<div style="color:var(--ok);font-weight:800">✅ This meets the requirements. You\'re ready for this question!</div>' : ''}
+      <details style="margin-top:8px"><summary style="cursor:pointer;font-weight:700">Compare side by side</summary><div class="mine"><b>Yours:</b>\n${highlight(text)}</div><div class="model">${highlight(e.model)}</div></details>`;
+    box.classList.add('show');
+  };
+});
 
 // ---- start ----
 const m = location.hash.match(/v=(\d+)/);
